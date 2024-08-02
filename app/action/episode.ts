@@ -43,13 +43,75 @@ export const createEpisode = async (
     return { success: false, message: '에피소드 생성에 실패하였습니다.' }
   }
 }
-export const editEpisodeTitle = async () => {}
-export const editEpisodeThumbnail = async () => {}
-export const editEpisodeAirDate = async () => {}
-export const editEpisodeEndDate = async () => {}
-export const editEpisodeDescription = async () => {}
-export const editEpisodeTags = async () => {}
 
-export const approveEpisodeRequest = async () => {}
+export const updateEpisode = async ({
+  title,
+  airDate,
+  endDate,
+  totalEpisodeCount,
+  description,
+  thumbnailUrl,
+  categories,
+  episodeId,
+}: {
+  title?: string
+  airDate?: Date
+  endDate?: Date
+  totalEpisodeCount?: number
+  description?: string
+  thumbnailUrl?: string
+  categories?: string[]
+  episodeId: string
+}): Promise<ActionType<Episode>> => {
+  try {
+    if (
+      !title &&
+      !airDate &&
+      !endDate &&
+      !totalEpisodeCount &&
+      !description &&
+      !thumbnailUrl &&
+      !categories?.length
+    )
+      return { success: false, message: '아무런 값을 입력하지 않았습니다.' }
 
-export const rejectEpisodeRequest = async () => {}
+    const userId = await getCurrentUserId()
+
+    const checkOwner = await db.episode.findUnique({
+      where: {
+        id: episodeId,
+        userId,
+      },
+    })
+
+    if (!checkOwner) {
+      return { success: false, message: '에피소드의 오너가 아닙니다.' }
+    }
+
+    const episode = await db.episode.update({
+      where: {
+        id: episodeId,
+      },
+      data: {
+        title,
+        airDate,
+        endDate,
+        totalEpisodeCount,
+        description,
+        thumbnailUrl,
+        categories,
+      },
+    })
+
+    if (!episode) {
+      return { success: false, message: '수정중에 에러가 발생하였습니다.' }
+    }
+    return {
+      success: true,
+      message: '에피소드 수정에 성공하였습니다.',
+      data: episode,
+    }
+  } catch (error) {
+    return { success: false, message: '수정중에 에러가 발생하였습니다.' }
+  }
+}
