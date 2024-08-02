@@ -23,6 +23,7 @@ model User {
   id       String   @id @default(cuid())
   email    String   @unique
   password String
+  nickname String
   iamgeUrl String?
   role     UserRole @default(GENERAL)
 
@@ -32,9 +33,20 @@ model User {
   userRoleRequest  UserRoleRequest?
   videoComments    VideoComment[]
   episodeFavorites EpisodeFavorite[]
+  sessions         Session[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique @map("session_token")
+  userId       String   @map("user_id")
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
 }
 
 model Episode {
