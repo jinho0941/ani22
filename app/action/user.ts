@@ -91,3 +91,7 @@ export const logout = async (): Promise<ActionType<null>> => {
     return { success: false, message: '로그아웃에 실패 하였습니다.' }
   }
 }
+
+export const editUserImg = async () => {}
+
+export const editUserNickname = async () => {}
