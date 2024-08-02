@@ -1,0 +1,140 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  GENERAL
+  UPLOADER
+  ADMIN
+}
+
+enum RequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model User {
+  id       String   @id @default(cuid())
+  email    String   @unique
+  password String
+  iamgeUrl String?
+  role     UserRole @default(GENERAL)
+
+  episodes         Episode[]
+  episodeRequest   EpisodeRequest[]
+  videoRequests    VideoRequest[]
+  userRoleRequest  UserRoleRequest?
+  videoComments    VideoComment[]
+  episodeFavorites EpisodeFavorite[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Episode {
+  id                String    @id @default(cuid())
+  title             String
+  airDate           DateTime?
+  endDate           DateTime?
+  totalEpisodeCount Int?
+  description       String?
+  thumbnailUrl      String?
+  categories        String[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId         String
+  user           User              @relation(fields: [userId], references: [id])
+  episodeRequest EpisodeRequest?
+  videos         Video[]
+  favorites      EpisodeFavorite[]
+}
+
+model Video {
+  id           String   @id @default(cuid())
+  title        String
+  order        Int
+  views        Int      @default(0)
+  url          String?
+  thumbnailUrl String?
+  description  String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @default(now())
+
+  episodeId    String
+  episode      Episode        @relation(fields: [episodeId], references: [id], onDelete: Cascade)
+  videoRequest VideoRequest?
+  comments     VideoComment[]
+}
+
+model VideoComment {
+  id        String   @id @default(cuid())
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  videoId String
+  video   Video  @relation(fields: [videoId], references: [id], onDelete: Cascade)
+}
+
+model EpisodeRequest {
+  id          String        @id @default(cuid())
+  episodeId   String        @unique
+  userId      String
+  requestDate DateTime      @default(now())
+  status      RequestStatus @default(PENDING)
+
+  episode Episode @relation(fields: [episodeId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+}
+
+model VideoRequest {
+  id          String        @id @default(cuid())
+  videoId     String        @unique
+  userId      String
+  requestDate DateTime      @default(now())
+  status      RequestStatus @default(PENDING)
+
+  video Video @relation(fields: [videoId], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+}
+
+model UserRoleRequest {
+  id          String        @id @default(cuid())
+  userId      String        @unique
+  requestDate DateTime      @default(now())
+  status      RequestStatus @default(PENDING)
+  title       String
+  content     String
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+}
+
+model EpisodeFavorite {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  episodeId String
+  episode   Episode @relation(fields: [episodeId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, episodeId])
+}
