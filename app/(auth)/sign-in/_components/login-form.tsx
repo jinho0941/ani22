@@ -57,7 +57,7 @@ export default function LoginForm() {
         return
       }
       toast.success(action.message)
-      router.replace('/activity-list')
+      router.replace('/')
     })
   }
 
