@@ -2,25 +2,20 @@
 
 import { auth } from '@/auth'
 import { db } from '@/lib/db'
-import { User } from '@prisma/client'
+import { User, UserRole } from '@prisma/client'
 
-export const getCurrentUserEmail = async (): Promise<string> => {
-  try {
-    const session = await auth()
-    if (!session) throw new Error('현재 로그인되어있지 않습니다.')
-    const email = session.user?.email
-    if (!email) throw new Error('존재하지 않는 이메일 입니다.')
+const getCurrentUserEmail = async (): Promise<string> => {
+  const session = await auth()
+  if (!session) throw new Error('현재 로그인되어있지 않습니다.')
+  const email = session.user?.email
+  if (!email) throw new Error('존재하지 않는 이메일 입니다.')
 
-    return email
-  } catch (error) {
-    throw new Error('이메일을 가져오는중에 에러가 발생하였습니다.')
-  }
+  return email
 }
 
 export const getCurrentUserId = async (): Promise<string> => {
+  const email = await getCurrentUserEmail()
   try {
-    const email = await getCurrentUserEmail()
-
     const user = await db.user.findUnique({
       where: { email },
       select: {
@@ -37,8 +32,8 @@ export const getCurrentUserId = async (): Promise<string> => {
 }
 
 export const getCurrentUser = async (): Promise<User> => {
+  const email = await getCurrentUserEmail()
   try {
-    const email = await getCurrentUserEmail()
     const user = await db.user.findUnique({
       where: {
         email,
@@ -49,5 +44,32 @@ export const getCurrentUser = async (): Promise<User> => {
     return user
   } catch (error) {
     throw new Error('유저 정보를 가져오는 중에 에러가 발생하였습니다.')
+  }
+}
+
+export const isCurrentUserUploaderOrAdmin = async (): Promise<boolean> => {
+  try {
+    const user = await getCurrentUser()
+    return user.role === UserRole.ADMIN || user.role === UserRole.UPLOADER
+  } catch (error) {
+    throw new Error('유저 권한을 확인하는 중에 에러가 발생하였습니다.')
+  }
+}
+
+export const isCurrentUserAdmin = async (): Promise<boolean> => {
+  try {
+    const user = await getCurrentUser()
+    return user.role === UserRole.ADMIN
+  } catch (error) {
+    throw new Error('유저 권한을 확인하는 중에 에러가 발생하였습니다.')
+  }
+}
+
+export const isLoggedIn = async (): Promise<boolean> => {
+  try {
+    await getCurrentUser()
+    return true
+  } catch (error) {
+    return false
   }
 }

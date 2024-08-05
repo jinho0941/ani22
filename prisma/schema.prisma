@@ -24,7 +24,7 @@ model User {
   email    String   @unique
   password String
   nickname String
-  iamgeUrl String?
+  imageUrl String?
   role     UserRole @default(GENERAL)
 
   episodes         Episode[]
@@ -34,6 +34,7 @@ model User {
   videoComments    VideoComment[]
   episodeFavorites EpisodeFavorite[]
   sessions         Session[]
+  videos           Video[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -62,7 +63,7 @@ model Episode {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  userId         String
+  userId         String            @unique
   user           User              @relation(fields: [userId], references: [id])
   episodeRequest EpisodeRequest?
   videos         Video[]
@@ -80,10 +81,13 @@ model Video {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @default(now())
 
-  episodeId    String
+  episodeId    String         @unique
   episode      Episode        @relation(fields: [episodeId], references: [id], onDelete: Cascade)
   videoRequest VideoRequest?
   comments     VideoComment[]
+
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model VideoComment {
@@ -95,14 +99,14 @@ model VideoComment {
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  videoId String
+  videoId String @unique
   video   Video  @relation(fields: [videoId], references: [id], onDelete: Cascade)
 }
 
 model EpisodeRequest {
   id          String        @id @default(cuid())
   episodeId   String        @unique
-  userId      String
+  userId      String        @unique
   requestDate DateTime      @default(now())
   status      RequestStatus @default(PENDING)
 
@@ -115,7 +119,7 @@ model EpisodeRequest {
 model VideoRequest {
   id          String        @id @default(cuid())
   videoId     String        @unique
-  userId      String
+  userId      String        @unique
   requestDate DateTime      @default(now())
   status      RequestStatus @default(PENDING)
 
@@ -142,10 +146,10 @@ model EpisodeFavorite {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
 
-  userId String
+  userId String @unique
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  episodeId String
+  episodeId String  @unique
   episode   Episode @relation(fields: [episodeId], references: [id], onDelete: Cascade)
 
   @@unique([userId, episodeId])

@@ -1,3 +1,84 @@
 'use server'
 
-export const sendUploaderApprovalRequest = async () => {}
+import { ActionType } from '@/type'
+import { RequestStatus, UserRoleRequest } from '@prisma/client'
+import { getCurrentUserId, isCurrentUserAdmin } from '../data/user'
+import { db } from '@/lib/db'
+import { checkAdmin, checkOwner } from '@/lib/access'
+
+export const sendUploaderApprovalRequest = async (
+  title: string,
+  content: string,
+): Promise<ActionType<UserRoleRequest>> => {
+  try {
+    const userId = await getCurrentUserId()
+
+    await checkOwner(userId)
+
+    const userRoleRequest = await db.userRoleRequest.create({
+      data: {
+        userId,
+        title,
+        content,
+      },
+    })
+    if (!userRoleRequest)
+      return { success: false, message: '권한 요청이 생성되지 않았습니다.' }
+
+    return {
+      success: true,
+      message: '요청 생성에 성공하였습니다.',
+      data: userRoleRequest,
+    }
+  } catch (error) {
+    return { success: false, message: '유저 권한 생성에 실패하였습니다.' }
+  }
+}
+
+export const approveUploaderRequest = async (
+  requestId: string,
+): Promise<ActionType<UserRoleRequest>> => {
+  try {
+    await checkAdmin()
+
+    const request = await db.userRoleRequest.update({
+      where: {
+        id: requestId,
+      },
+      data: {
+        status: RequestStatus.APPROVED,
+      },
+    })
+
+    if (!request)
+      return { success: false, message: '승인 요청에 실패하였습니다.' }
+
+    return { success: true, message: '승인 요청에 성공하였습니다.' }
+  } catch (error) {
+    return { success: false, message: '승인 요청중에 에러가 발생하였습니다' }
+  }
+}
+
+export const rejectUploaderRequest = async (
+  requestId: string,
+): Promise<ActionType<UserRoleRequest>> => {
+  try {
+    await checkAdmin()
+
+    const request = await db.userRoleRequest.update({
+      where: {
+        id: requestId,
+      },
+      data: {
+        status: RequestStatus.REJECTED,
+      },
+    })
+
+    if (!request)
+      return { success: false, message: '승인 요청에 실패하였습니다.' }
+
+    return { success: true, message: '승인 요청에 성공하였습니다.' }
+  } catch (error) {
+    return { success: false, message: '승인 요청중에 에러가 발생하였습니다' }
+  }
+}

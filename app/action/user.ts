@@ -7,6 +7,8 @@ import { LoginSchema, RegisterSchema } from '@/schema'
 import { ActionType, LoginSchemaType, RegisterSchemaType } from '@/type'
 import { User } from '@prisma/client'
 import { AuthError } from 'next-auth'
+import { getCurrentUserId } from '@/app/data/user'
+import { checkOwner } from '@/lib/access'
 
 export const register = async (
   form: RegisterSchemaType,
@@ -92,6 +94,56 @@ export const logout = async (): Promise<ActionType<null>> => {
   }
 }
 
-export const editUserImg = async () => {}
+export const editUserImg = async (
+  imageUrl: string,
+): Promise<ActionType<User>> => {
+  try {
+    const userId = await getCurrentUserId()
 
-export const editUserNickname = async () => {}
+    await checkOwner(userId)
+
+    const user = await db.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        imageUrl,
+      },
+    })
+    if (!user)
+      return { success: false, message: '수정된 데이터가 존재하지 않습니다.' }
+
+    return { success: true, message: '유저 이미지 수정에 성공하였습니다.' }
+  } catch (error) {
+    return {
+      success: false,
+      message: '유저 이미지 수정중에 에러가 발생하였습니다.',
+    }
+  }
+}
+
+export const editUserNickname = async (nickname: string) => {
+  try {
+    const userId = await getCurrentUserId()
+
+    await checkOwner(userId)
+
+    const user = await db.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        nickname,
+      },
+    })
+    if (!user)
+      return { success: false, message: '수정된 데이터가 존재하지 않습니다.' }
+
+    return { success: true, message: '유저 닉네임 수정에 성공하였습니다.' }
+  } catch (error) {
+    return {
+      success: false,
+      message: '유저 닉네임 수정중에 에러가 발생하였습니다.',
+    }
+  }
+}

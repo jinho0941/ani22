@@ -1,24 +1,19 @@
 'use server'
 
 import { ActionType } from '@/type'
-import { Episode, UserRole } from '@prisma/client'
-import { getCurrentUser, getCurrentUserId } from '@/app/data/user'
+import { Episode } from '@prisma/client'
+import { getCurrentUserId, isCurrentUserUploaderOrAdmin } from '@/app/data/user'
 import { db } from '@/lib/db'
-
-export const isCurrentUserUploaderOrAdmin = async (): Promise<boolean> => {
-  try {
-    const user = await getCurrentUser()
-    return user.role === UserRole.ADMIN || user.role === UserRole.UPLOADER
-  } catch (error) {
-    throw new Error('유저 권한을 확인하는 중에 에러가 발생하였습니다.')
-  }
-}
+import { checkOwner } from '@/lib/access'
 
 export const createEpisode = async (
   title: string,
 ): Promise<ActionType<Episode>> => {
   try {
     const userId = await getCurrentUserId()
+
+    await checkOwner(userId)
+
     const isUploaderOrAdmin = await isCurrentUserUploaderOrAdmin()
 
     if (!isUploaderOrAdmin) {
@@ -77,16 +72,7 @@ export const updateEpisode = async ({
 
     const userId = await getCurrentUserId()
 
-    const checkOwner = await db.episode.findUnique({
-      where: {
-        id: episodeId,
-        userId,
-      },
-    })
-
-    if (!checkOwner) {
-      return { success: false, message: '에피소드의 오너가 아닙니다.' }
-    }
+    await checkOwner(userId)
 
     const episode = await db.episode.update({
       where: {
