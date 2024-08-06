@@ -21,7 +21,6 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
         />
         <section className='mt-4 lg:mt-12'>{children}</section>
       </div>
-      {children}
     </NavContainer>
   )
 }
