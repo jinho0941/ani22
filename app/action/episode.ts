@@ -96,3 +96,27 @@ export const updateEpisode = async ({
     return { success: false, message: '수정중에 에러가 발생하였습니다.' }
   }
 }
+
+export const findEpisodeTitleByTitle = async (
+  title: string,
+): Promise<string[]> => {
+  try {
+    const episodes = await db.episode.findMany({
+      where: {
+        title: {
+          contains: title,
+          mode: 'insensitive',
+        },
+      },
+      select: {
+        title: true,
+      },
+    })
+    const titleList = episodes.map((episode) => episode.title)
+
+    return titleList
+  } catch (error) {
+    console.error('Error finding episodes by title:', error)
+    throw new Error('에피소드를 찾는 중에 에러가 발생하였습니다.')
+  }
+}
