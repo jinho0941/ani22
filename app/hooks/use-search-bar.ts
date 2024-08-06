@@ -44,6 +44,7 @@ export const useSearchBar = () => {
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     const { search } = values
     const query = new URLSearchParams({ find: search })
+    form.reset()
     router.push(`/search?${query}`)
   }
 
