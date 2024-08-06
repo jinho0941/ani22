@@ -17,8 +17,8 @@ export const Navbar = async () => {
         </div>
         <SearchBar />
         <div className='flex justify-end gap-x-4'>
-          <DashboardButton />
           <ModeToggle />
+          <DashboardButton />
           <UserButton imgUrl={user.imageUrl!} />
         </div>
       </div>
