@@ -1,16 +1,13 @@
 'use server'
 
-import { checkAdmin } from '@/lib/access'
 import { db } from '@/lib/db'
 import { RoleRequestWithUser, WithCursor } from '@/type'
 
-const getUserRoleRequests = async (
+export const getUserRoleRequests = async (
   cursor?: string,
   take = 10,
 ): Promise<WithCursor<RoleRequestWithUser[]>> => {
   try {
-    await checkAdmin()
-
     const requests = await db.userRoleRequest.findMany({
       include: {
         user: true,
@@ -26,7 +23,7 @@ const getUserRoleRequests = async (
     if (!requests) throw new Error('존재하지 않는 요청입니다.')
 
     const lastRequest = requests[requests.length - 1]
-    const cursorId = lastRequest.id ?? null
+    const cursorId = lastRequest ? lastRequest.id : null
 
     return { data: requests, cursorId }
   } catch (error) {

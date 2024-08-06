@@ -15,9 +15,7 @@ export const getVideoRequestByVideoId = async (
       },
     })
 
-    if (!request) throw new Error('존재하지 않는 요청입니다.')
-
-    return request
+    return request!
   } catch (error) {
     throw new Error('요청중에 에러가 발생하였습니다.')
   }
@@ -43,7 +41,7 @@ export const getVideoRequestsWithUser = async (
     })
 
     const lastRequest = requests[requests.length - 1]
-    const cursorId = lastRequest.id ?? null
+    const cursorId = lastRequest ? lastRequest.id : null
 
     return { data: requests, cursorId }
   } catch (error) {

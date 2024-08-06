@@ -107,3 +107,22 @@ export const getVideoCompletionStatus = async (
     )
   }
 }
+
+export const getVideosByEpisodeId = async (
+  episodeId: string,
+): Promise<Video[]> => {
+  try {
+    const videos = await db.video.findMany({
+      where: {
+        episodeId,
+      },
+      orderBy: {
+        order: 'desc',
+      },
+    })
+
+    return videos
+  } catch (error) {
+    throw new Error('비디오 요청중 에러가 발생하였습니다.')
+  }
+}

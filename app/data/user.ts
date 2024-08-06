@@ -73,3 +73,12 @@ export const isLoggedIn = async (): Promise<boolean> => {
     return false
   }
 }
+
+export const getAllUser = async (): Promise<User[]> => {
+  try {
+    const users = db.user.findMany({})
+    return users
+  } catch (error) {
+    throw new Error('유저를 가져오는 중에 에러가 발생하였습니다.')
+  }
+}

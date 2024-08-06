@@ -1,6 +1,5 @@
 'use server'
 
-import { checkOwner } from '@/lib/access'
 import { db } from '@/lib/db'
 import { getCurrentUserId } from '@/app/data/user'
 import {
@@ -18,8 +17,6 @@ export const getEpisodesWithIsFavorite = async (
   try {
     const userId = await getCurrentUserId()
 
-    await checkOwner(userId)
-
     const episodes = await db.episode.findMany({
       where: {
         episodeRequest: {
@@ -34,7 +31,7 @@ export const getEpisodesWithIsFavorite = async (
         },
       },
       orderBy: {
-        createdAt: 'asc',
+        createdAt: 'desc',
       },
       take,
       ...(cursor && { cursor: { id: cursor } }),
@@ -48,7 +45,7 @@ export const getEpisodesWithIsFavorite = async (
 
     const lastEpisode =
       episodesWithIsFavorite[episodesWithIsFavorite.length - 1]
-    const cursorId = lastEpisode.id ?? null
+    const cursorId = lastEpisode ? lastEpisode.id : null
 
     return { data: episodesWithIsFavorite, cursorId }
   } catch (error) {
@@ -67,7 +64,7 @@ export const getEpisodeByIdWithVideos = async (
       include: {
         videos: {
           orderBy: {
-            order: 'asc',
+            order: 'desc',
           },
         },
       },
@@ -88,8 +85,6 @@ export const getMyFavoriteEpisodes = async (
   try {
     const userId = await getCurrentUserId()
 
-    await checkOwner(userId)
-
     const episodes = await db.episode.findMany({
       where: {
         favorites: {
@@ -97,16 +92,15 @@ export const getMyFavoriteEpisodes = async (
         },
       },
       orderBy: {
-        createdAt: 'asc',
+        createdAt: 'desc',
       },
       take,
       ...(cursor && { cursor: { id: cursor } }),
       skip: cursor ? 1 : 0,
     })
-    if (!episodes) throw new Error('존재하지 않은 에피소드 입니다.')
 
     const lastEpisode = episodes[episodes.length - 1]
-    const cursorId = lastEpisode.id ?? null
+    const cursorId = lastEpisode ? lastEpisode.id : null
 
     return { data: episodes, cursorId }
   } catch (error) {
@@ -121,26 +115,24 @@ export const getMyUploadedEpisodes = async (
   try {
     const userId = await getCurrentUserId()
 
-    await checkOwner(userId)
-
     const episodes = await db.episode.findMany({
       where: {
         userId,
       },
       orderBy: {
-        createdAt: 'asc',
+        createdAt: 'desc',
       },
       take,
       ...(cursor && { cursor: { id: cursor } }),
       skip: cursor ? 1 : 0,
     })
-    if (!episodes) throw new Error('존재하지 않은 에피소드 입니다.')
 
     const lastEpisode = episodes[episodes.length - 1]
-    const cursorId = lastEpisode.id ?? null
+    const cursorId = lastEpisode ? lastEpisode.id : null
 
     return { data: episodes, cursorId }
   } catch (error) {
+    console.log(error)
     throw new Error('에피소드를 가져오는 중에 에러가 발생하였습니다.')
   }
 }
@@ -227,5 +219,19 @@ export const getEpisodeCompletionStatus = async (
     throw new Error(
       '에피소드 데이터의 완성 상태를 확인하는 중에 에러가 발생하였습니다.',
     )
+  }
+}
+
+export const getEpisodeById = async (episodeId: string): Promise<Episode> => {
+  try {
+    const episode = await db.episode.findUnique({
+      where: {
+        id: episodeId,
+      },
+    })
+
+    return episode!
+  } catch (error) {
+    throw new Error('에피소드를 가져오는중에 에러가 발생하였습니다.')
   }
 }
