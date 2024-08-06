@@ -41,7 +41,7 @@ export const EpisodeList = ({ episodes, cursorId, search, order }: Props) => {
           key={episode.id}
           imgSrc={episode.thumbnailUrl!}
           title={episode.title}
-          href={`/uploader/${episode.id}`}
+          href={`/edit/episode/${episode.id}`}
           request={episode.episodeRequest}
         />
       ))}
