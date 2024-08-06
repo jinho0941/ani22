@@ -11,7 +11,7 @@ const Page = async () => {
   const users = await getAllUser()
 
   return (
-    <div className='w-[800px]  grid grid-cols-2 gap-4'>
+    <div className='w-[800px] grid grid-cols-2 gap-4'>
       <CreateEpisode episodes={episodes} />
       <CreateUser users={users} />
       <CreateUserRoleRequest />
