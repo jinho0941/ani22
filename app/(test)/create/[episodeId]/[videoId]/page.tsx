@@ -1,12 +1,12 @@
-import { getVideoById } from '@/app/data/video'
 import { getVideoRequestByVideoId } from '@/app/data/video-request'
 import { CreateVideoRequest } from './_components/create-video-request'
 import { getVideoCommentsByVideoId } from '@/app/data/video-comment'
 import { CreateVideoComment } from './_components/create-video-comment'
+import { getVideoByIdWithEpisodesAndComments } from '@/app/data/video'
 
 const Page = async ({ params }: { params: { videoId: string } }) => {
   const videoId = params.videoId
-  const video = await getVideoById(videoId)
+  const video = await getVideoByIdWithEpisodesAndComments(videoId)
   const request = await getVideoRequestByVideoId(videoId)
   const comments = await getVideoCommentsByVideoId(videoId)
 

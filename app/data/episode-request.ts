@@ -35,9 +35,9 @@ export const getEpisodeRequestsWithUser = async (
 
 export const getEpisodeRequestByEpisodeId = async (
   episodeId: string,
-): Promise<EpisodeRequest> => {
+): Promise<EpisodeRequest | null> => {
   try {
-    await checkAdmin()
+    // await checkAdmin()
     const request = await db.episodeRequest.findUnique({
       where: {
         episodeId,

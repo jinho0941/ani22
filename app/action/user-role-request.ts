@@ -1,7 +1,7 @@
 'use server'
 
 import { ActionType } from '@/type'
-import { RequestStatus, UserRoleRequest } from '@prisma/client'
+import { RequestStatus, UserRole, UserRoleRequest } from '@prisma/client'
 import { getCurrentUserId, isCurrentUserUploaderOrAdmin } from '../data/user'
 import { db } from '@/lib/db'
 import { checkAdmin } from '@/lib/access'
@@ -90,10 +90,12 @@ export const reSendUploaderApprovalRequest = async ({
 
 export type ApproveUploaderRequestProps = {
   requestId: string
+  requestUserId: string
 }
 
 export const approveUploaderRequest = async ({
   requestId,
+  requestUserId,
 }: ApproveUploaderRequestProps): Promise<ActionType<UserRoleRequest>> => {
   try {
     await checkAdmin()
@@ -104,6 +106,15 @@ export const approveUploaderRequest = async ({
       },
       data: {
         status: RequestStatus.APPROVED,
+      },
+    })
+
+    const user = await db.user.update({
+      where: {
+        id: requestUserId,
+      },
+      data: {
+        role: UserRole.UPLOADER,
       },
     })
 
