@@ -85,7 +85,7 @@ export const login = async (
 
 export const logout = async (): Promise<ActionType<null>> => {
   try {
-    await signOut({ redirect: false })
+    await signOut({ redirect: true, redirectTo: '/sign-in' })
     return { success: true, message: '로그아웃에 성공 하였습니다.' }
   } catch (error) {
     return { success: false, message: '로그아웃에 실패 하였습니다.' }
