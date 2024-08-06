@@ -9,3 +9,8 @@ export function cn(...inputs: ClassValue[]) {
 export const hashPassword = (password: string) => bcrypt.hashSync(password, 10)
 export const verifyPassword = (password: string, hashedPassword: string) =>
   bcrypt.compareSync(password, hashedPassword)
+
+export const getRandomString = (arr: string[]) => {
+  const randomIndex = Math.floor(Math.random() * arr.length)
+  return arr[randomIndex]
+}
