@@ -17,7 +17,7 @@ export type ActionType<T> = {
 }
 
 export type WithCursor<T> = {
-  data?: T
+  data: T
   cursorId: string | null
 }
 
