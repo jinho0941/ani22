@@ -128,3 +128,62 @@ export const rejectVideoRequest = async ({
     return { success: false, message: '승인중에 에러가 발생하였습니다.' }
   }
 }
+
+export const deleteVideoRequest = async (
+  videoId: string,
+): Promise<ActionType<VideoRequest>> => {
+  try {
+    const userId = await getCurrentUserId()
+
+    const existingRequest = await db.videoRequest.findUnique({
+      where: {
+        videoId,
+        userId,
+        status: 'PENDING',
+      },
+    })
+
+    if (!existingRequest) {
+      return { success: false, message: '신청이 존재하지 않습니다.' }
+    }
+
+    await db.videoRequest.delete({
+      where: {
+        id: existingRequest.id,
+      },
+    })
+
+    return {
+      success: true,
+      message: '신청이 취소되었습니다.',
+    }
+  } catch (error) {
+    return { success: false, message: '신청 취소 중에 에러가 발생하였습니다.' }
+  }
+}
+
+export type SetPendingVideoRequestProps = {
+  videoId: string
+}
+export const setPendingVideoRequest = async ({
+  videoId,
+}: SetPendingVideoRequestProps): Promise<ActionType<VideoRequest>> => {
+  try {
+    const checkRequest = await db.videoRequest.findUnique({
+      where: { videoId },
+    })
+    if (!checkRequest)
+      return { success: false, message: '존재하지 않는 요청입니다.' }
+
+    const request = await db.videoRequest.update({
+      where: { videoId },
+      data: {
+        status: RequestStatus.PENDING,
+      },
+    })
+
+    return { success: true, message: '요청 상태를 업데이트 하였습니다.' }
+  } catch (error) {
+    return { success: false, message: '신청 변경 중에 에러가 발생하였습니다.' }
+  }
+}
