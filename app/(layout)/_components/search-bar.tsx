@@ -6,7 +6,7 @@ import { Form, FormControl, FormField, FormItem } from '@/components/ui/form'
 import { useSearchBar } from '@/app/hooks/use-search-bar'
 
 export const SearchBar = () => {
-  const { form, results, onSubmit } = useSearchBar()
+  const { form, results, onSubmit, onClick } = useSearchBar()
 
   return (
     <div className='flex justify-center relative w-full'>
@@ -39,7 +39,11 @@ export const SearchBar = () => {
       {results.length > 0 && (
         <div className='absolute top-full mt-2 w-full bg-white dark:bg-slate-900 border border-gray-200 rounded-md shadow-lg z-10'>
           {results.map((title, index) => (
-            <div key={index} className='p-2 hover:bg-gray-100 cursor-pointer'>
+            <div
+              key={index}
+              onClick={() => onClick(title)}
+              className='p-2 hover:bg-gray-100 dark:hover:bg-slate-800 cursor-pointer'
+            >
               {title}
             </div>
           ))}

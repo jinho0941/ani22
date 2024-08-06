@@ -48,5 +48,11 @@ export const useSearchBar = () => {
     router.push(`/search?${query}`)
   }
 
-  return { form, results, onSubmit }
+  const onClick = (value: string) => {
+    const query = new URLSearchParams({ find: value })
+    form.reset()
+    router.push(`/search?${query}`)
+  }
+
+  return { form, results, onSubmit, onClick }
 }
