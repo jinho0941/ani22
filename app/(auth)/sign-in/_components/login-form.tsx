@@ -44,7 +44,7 @@ export default function LoginForm() {
     resolver: zodResolver(LoginSchema),
     defaultValues: {
       email: '',
-      password: '',
+      password: 'test1234',
     },
     mode: 'onBlur',
   })
