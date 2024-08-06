@@ -5,7 +5,6 @@ import { getCurrentUserId } from '@/app/data/user'
 import { ActionType } from '@/type'
 import { Video } from '@prisma/client'
 import { cookies } from 'next/headers'
-import { checkOwner } from '@/lib/access'
 
 export type CreateVideoProps = {
   title: string
@@ -18,8 +17,6 @@ export const createVideo = async ({
 }: CreateVideoProps): Promise<ActionType<Video>> => {
   try {
     const userId = await getCurrentUserId()
-
-    await checkOwner(userId)
 
     const maxOrderVideo = await db.video.findFirst({
       where: { episodeId },
@@ -101,10 +98,6 @@ export const updateVideo = async ({
   try {
     if (!title && !url && !thumbnailUrl && !description)
       return { success: false, message: '아무런 값을 입력하지 않았습니다.' }
-
-    const userId = await getCurrentUserId()
-
-    await checkOwner(userId)
 
     const video = await db.video.update({
       where: {

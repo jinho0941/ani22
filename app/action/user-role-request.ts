@@ -2,9 +2,9 @@
 
 import { ActionType } from '@/type'
 import { RequestStatus, UserRoleRequest } from '@prisma/client'
-import { getCurrentUserId } from '../data/user'
+import { getCurrentUserId, isCurrentUserUploaderOrAdmin } from '../data/user'
 import { db } from '@/lib/db'
-import { checkAdmin, checkOwner } from '@/lib/access'
+import { checkAdmin } from '@/lib/access'
 
 export type SendUploaderApprovalRequestProps = {
   title: string
@@ -18,7 +18,10 @@ export const sendUploaderApprovalRequest = async ({
   try {
     const userId = await getCurrentUserId()
 
-    await checkOwner(userId)
+    const isUploader = await isCurrentUserUploaderOrAdmin()
+    if (isUploader) {
+      return { success: false, message: '이미 권한이 있는 유저입니다.' }
+    }
 
     const userRoleRequest = await db.userRoleRequest.create({
       data: {

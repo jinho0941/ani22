@@ -5,21 +5,19 @@ import { EpisodeRequest, RequestStatus } from '@prisma/client'
 import { getCurrentUserId, isCurrentUserAdmin } from '@/app/data/user'
 import { db } from '@/lib/db'
 import { getEpisodeCompletionStatus } from '../data/episode'
-import { checkAdmin, checkOwner, checkUploader } from '@/lib/access'
+import { checkAdmin, checkUploader } from '@/lib/access'
 
-export type SendEpisodeRequestProps = {
+export type SendEpisodeApprovalRequestProps = {
   episodeId: string
 }
 
 export const sendEpisodeApprovalRequest = async ({
   episodeId,
-}: SendEpisodeRequestProps): Promise<ActionType<EpisodeRequest>> => {
+}: SendEpisodeApprovalRequestProps): Promise<ActionType<EpisodeRequest>> => {
   try {
     await checkUploader()
 
     const userId = await getCurrentUserId()
-
-    await checkOwner(userId)
 
     const existingRequest = await db.episodeRequest.findFirst({
       where: {

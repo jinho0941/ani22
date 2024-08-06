@@ -2,10 +2,10 @@
 
 import { ActionType } from '@/type'
 import { RequestStatus, VideoRequest } from '@prisma/client'
-import { getCurrentUserId } from '@/app/data/user'
+import { getCurrentUserId, isCurrentUserAdmin } from '@/app/data/user'
 import { db } from '@/lib/db'
 import { getVideoCompletionStatus } from '@/app/data/video'
-import { checkAdmin, checkOwner, checkUploader } from '@/lib/access'
+import { checkAdmin, checkUploader } from '@/lib/access'
 
 export type SendApprovalVideoRequestProps = {
   videoId: string
@@ -18,8 +18,6 @@ export const sendApprovalVideoRequest = async ({
     await checkUploader()
 
     const userId = await getCurrentUserId()
-
-    await checkOwner(userId)
 
     const existingRequest = await db.videoRequest.findUnique({
       where: {
@@ -36,13 +34,26 @@ export const sendApprovalVideoRequest = async ({
     if (!isCompleted)
       return { success: false, message: '모든 항목을 채워주세요.' }
 
-    const videoRequest = await db.videoRequest.create({
-      data: {
-        videoId,
-        userId,
-        status: RequestStatus.PENDING,
-      },
-    })
+    let videoRequest
+
+    const isAdmin = await isCurrentUserAdmin()
+    if (isAdmin) {
+      videoRequest = await db.videoRequest.create({
+        data: {
+          videoId,
+          userId,
+          status: RequestStatus.APPROVED,
+        },
+      })
+    } else {
+      videoRequest = await db.videoRequest.create({
+        data: {
+          videoId,
+          userId,
+          status: RequestStatus.PENDING,
+        },
+      })
+    }
 
     if (!videoRequest) {
       return { success: false, message: '배포 신청에 실패하였습니다.' }

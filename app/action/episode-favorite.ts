@@ -4,7 +4,6 @@ import { ActionType } from '@/type'
 import { EpisodeFavorite } from '@prisma/client'
 import { getCurrentUserId } from '@/app/data/user'
 import { db } from '@/lib/db'
-import { checkOwner } from '@/lib/access'
 
 export type ToggleProps = {
   episodeId: string
@@ -15,8 +14,6 @@ export const toggleEpisodeFavorite = async ({
 }: ToggleProps): Promise<ActionType<EpisodeFavorite>> => {
   try {
     const userId = await getCurrentUserId()
-
-    await checkOwner(userId)
 
     const existingFavorite = await db.episodeFavorite.findUnique({
       where: {

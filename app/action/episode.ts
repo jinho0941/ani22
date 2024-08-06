@@ -4,7 +4,7 @@ import { ActionType } from '@/type'
 import { Episode } from '@prisma/client'
 import { getCurrentUserId, isCurrentUserUploaderOrAdmin } from '@/app/data/user'
 import { db } from '@/lib/db'
-import { checkOwner } from '@/lib/access'
+import { checkUploader } from '@/lib/access'
 
 export type CreateEpisodeProps = {
   title: string
@@ -15,14 +15,7 @@ export const createEpisode = async ({
 }: CreateEpisodeProps): Promise<ActionType<Episode>> => {
   try {
     const userId = await getCurrentUserId()
-
-    await checkOwner(userId)
-
-    const isUploaderOrAdmin = await isCurrentUserUploaderOrAdmin()
-
-    if (!isUploaderOrAdmin) {
-      return { success: false, message: '권한이 없는 유저입니다.' }
-    }
+    await checkUploader()
 
     const episode = await db.episode.create({
       data: {
@@ -75,10 +68,6 @@ export const updateEpisode = async ({
       !categories?.length
     )
       return { success: false, message: '아무런 값을 입력하지 않았습니다.' }
-
-    const userId = await getCurrentUserId()
-
-    await checkOwner(userId)
 
     const episode = await db.episode.update({
       where: {

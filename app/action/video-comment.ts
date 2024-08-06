@@ -1,7 +1,6 @@
 'use server'
 
 import { getCurrentUserId } from '@/app/data/user'
-import { checkOwner } from '@/lib/access'
 import { db } from '@/lib/db'
 import { ActionType } from '@/type'
 import { VideoComment } from '@prisma/client'
@@ -17,8 +16,6 @@ export const createVideoComment = async ({
 }: CreateVideoCommentProps): Promise<ActionType<VideoComment>> => {
   try {
     const userId = await getCurrentUserId()
-
-    await checkOwner(userId)
 
     const comment = await db.videoComment.create({
       data: {

@@ -8,7 +8,6 @@ import { ActionType, LoginSchemaType, RegisterSchemaType } from '@/type'
 import { User } from '@prisma/client'
 import { AuthError } from 'next-auth'
 import { getCurrentUserId } from '@/app/data/user'
-import { checkOwner } from '@/lib/access'
 
 export const register = async (
   form: RegisterSchemaType,
@@ -44,7 +43,6 @@ export const register = async (
       data: createUser,
     }
   } catch (error) {
-    console.log(error)
     return { success: false, message: '회원가입 중에 에러가 발생하였습니다.' }
   }
 }
@@ -104,8 +102,6 @@ export const editUserImg = async ({
   try {
     const userId = await getCurrentUserId()
 
-    await checkOwner(userId)
-
     const user = await db.user.update({
       where: {
         id: userId,
@@ -131,8 +127,6 @@ export const editUserNickname = async ({ nickname }: editUserNickNameProps) => {
   try {
     const userId = await getCurrentUserId()
 
-    await checkOwner(userId)
-
     const user = await db.user.update({
       where: {
         id: userId,
@@ -150,5 +144,44 @@ export const editUserNickname = async ({ nickname }: editUserNickNameProps) => {
       success: false,
       message: '유저 닉네임 수정중에 에러가 발생하였습니다.',
     }
+  }
+}
+
+export type CreateUserProps = {
+  email: string
+  nickname: string
+}
+export const createUser = async ({
+  email,
+  nickname,
+}: CreateUserProps): Promise<ActionType<User>> => {
+  try {
+    const password = 'test1234'
+
+    const checkExistingUser = await db.user.findUnique({
+      where: {
+        email,
+      },
+    })
+    if (checkExistingUser)
+      return { success: false, message: '이미 사용중인 이메일입니다.' }
+
+    const hashedPassword = hashPassword(password)
+
+    const createUser = await db.user.create({
+      data: {
+        email,
+        nickname,
+        password: hashedPassword,
+      },
+    })
+
+    return {
+      success: true,
+      message: '회원가입에 성공하였습니다.',
+      data: createUser,
+    }
+  } catch (error) {
+    return { success: false, message: '회원가입 중에 에러가 발생하였습니다.' }
   }
 }

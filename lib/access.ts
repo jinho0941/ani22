@@ -1,7 +1,6 @@
 'use server'
 
 import {
-  getCurrentUserId,
   isCurrentUserAdmin,
   isCurrentUserUploaderOrAdmin,
 } from '@/app/data/user'
@@ -16,10 +15,4 @@ export const checkAdmin = async () => {
 export const checkUploader = async () => {
   const isUploader = await isCurrentUserUploaderOrAdmin()
   if (!isUploader) throw new Error(message)
-}
-
-export const checkOwner = async (userId: string) => {
-  const currentUserId = await getCurrentUserId()
-
-  if (currentUserId !== userId) throw new Error(message)
 }
