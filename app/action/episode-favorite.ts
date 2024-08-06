@@ -6,9 +6,13 @@ import { getCurrentUserId } from '@/app/data/user'
 import { db } from '@/lib/db'
 import { checkOwner } from '@/lib/access'
 
-export const toggleEpisodeFavorite = async (
-  episodeId: string,
-): Promise<ActionType<EpisodeFavorite>> => {
+export type ToggleProps = {
+  episodeId: string
+}
+
+export const toggleEpisodeFavorite = async ({
+  episodeId,
+}: ToggleProps): Promise<ActionType<EpisodeFavorite>> => {
   try {
     const userId = await getCurrentUserId()
 

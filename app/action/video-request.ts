@@ -2,14 +2,18 @@
 
 import { ActionType } from '@/type'
 import { RequestStatus, VideoRequest } from '@prisma/client'
-import { getCurrentUserId, isCurrentUserAdmin } from '@/app/data/user'
+import { getCurrentUserId } from '@/app/data/user'
 import { db } from '@/lib/db'
 import { getVideoCompletionStatus } from '@/app/data/video'
 import { checkAdmin, checkOwner, checkUploader } from '@/lib/access'
 
-export const sendApprovalVideoRequest = async (
-  videoId: string,
-): Promise<ActionType<VideoRequest>> => {
+export type SendApprovalVideoRequestProps = {
+  videoId: string
+}
+
+export const sendApprovalVideoRequest = async ({
+  videoId,
+}: SendApprovalVideoRequestProps): Promise<ActionType<VideoRequest>> => {
   try {
     await checkUploader()
 
@@ -54,9 +58,12 @@ export const sendApprovalVideoRequest = async (
   }
 }
 
-export const approveVideoRequest = async (
-  requestId: string,
-): Promise<ActionType<VideoRequest>> => {
+export type ApproveVideoRequestProps = {
+  requestId: string
+}
+export const approveVideoRequest = async ({
+  requestId,
+}: ApproveVideoRequestProps): Promise<ActionType<VideoRequest>> => {
   try {
     await checkAdmin()
 
@@ -81,9 +88,12 @@ export const approveVideoRequest = async (
   }
 }
 
-export const rejectVideoRequest = async (
-  requestId: string,
-): Promise<ActionType<VideoRequest>> => {
+export type RejectVideoRequestProps = {
+  requestId: string
+}
+export const rejectVideoRequest = async ({
+  requestId,
+}: RejectVideoRequestProps): Promise<ActionType<VideoRequest>> => {
   try {
     await checkAdmin()
 

@@ -2,14 +2,19 @@
 
 import { ActionType } from '@/type'
 import { RequestStatus, UserRoleRequest } from '@prisma/client'
-import { getCurrentUserId, isCurrentUserAdmin } from '../data/user'
+import { getCurrentUserId } from '../data/user'
 import { db } from '@/lib/db'
 import { checkAdmin, checkOwner } from '@/lib/access'
 
-export const sendUploaderApprovalRequest = async (
-  title: string,
-  content: string,
-): Promise<ActionType<UserRoleRequest>> => {
+export type SendUploaderApprovalRequestProps = {
+  title: string
+  content: string
+}
+
+export const sendUploaderApprovalRequest = async ({
+  title,
+  content,
+}: SendUploaderApprovalRequestProps): Promise<ActionType<UserRoleRequest>> => {
   try {
     const userId = await getCurrentUserId()
 
@@ -35,9 +40,13 @@ export const sendUploaderApprovalRequest = async (
   }
 }
 
-export const approveUploaderRequest = async (
-  requestId: string,
-): Promise<ActionType<UserRoleRequest>> => {
+export type ApproveUploaderRequestProps = {
+  requestId: string
+}
+
+export const approveUploaderRequest = async ({
+  requestId,
+}: ApproveUploaderRequestProps): Promise<ActionType<UserRoleRequest>> => {
   try {
     await checkAdmin()
 
@@ -59,9 +68,12 @@ export const approveUploaderRequest = async (
   }
 }
 
-export const rejectUploaderRequest = async (
-  requestId: string,
-): Promise<ActionType<UserRoleRequest>> => {
+export type RejectUploaderRequestProps = {
+  requestId: string
+}
+export const rejectUploaderRequest = async ({
+  requestId,
+}: RejectUploaderRequestProps): Promise<ActionType<UserRoleRequest>> => {
   try {
     await checkAdmin()
 

@@ -6,10 +6,15 @@ import { db } from '@/lib/db'
 import { ActionType } from '@/type'
 import { VideoComment } from '@prisma/client'
 
-export const createVideoComment = async (
-  videoId: string,
-  content: string,
-): Promise<ActionType<VideoComment>> => {
+export type CreateVideoCommentProps = {
+  videoId: string
+  content: string
+}
+
+export const createVideoComment = async ({
+  videoId,
+  content,
+}: CreateVideoCommentProps): Promise<ActionType<VideoComment>> => {
   try {
     const userId = await getCurrentUserId()
 

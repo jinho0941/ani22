@@ -6,9 +6,13 @@ import { getCurrentUserId, isCurrentUserUploaderOrAdmin } from '@/app/data/user'
 import { db } from '@/lib/db'
 import { checkOwner } from '@/lib/access'
 
-export const createEpisode = async (
-  title: string,
-): Promise<ActionType<Episode>> => {
+export type CreateEpisodeProps = {
+  title: string
+}
+
+export const createEpisode = async ({
+  title,
+}: CreateEpisodeProps): Promise<ActionType<Episode>> => {
   try {
     const userId = await getCurrentUserId()
 
@@ -39,6 +43,17 @@ export const createEpisode = async (
   }
 }
 
+export type UpdateEpisodeProps = {
+  title?: string
+  airDate?: Date
+  endDate?: Date
+  totalEpisodeCount?: number
+  description?: string
+  thumbnailUrl?: string
+  categories?: string[]
+  episodeId: string
+}
+
 export const updateEpisode = async ({
   title,
   airDate,
@@ -48,16 +63,7 @@ export const updateEpisode = async ({
   thumbnailUrl,
   categories,
   episodeId,
-}: {
-  title?: string
-  airDate?: Date
-  endDate?: Date
-  totalEpisodeCount?: number
-  description?: string
-  thumbnailUrl?: string
-  categories?: string[]
-  episodeId: string
-}): Promise<ActionType<Episode>> => {
+}: UpdateEpisodeProps): Promise<ActionType<Episode>> => {
   try {
     if (
       !title &&

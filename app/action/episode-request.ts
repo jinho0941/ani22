@@ -7,9 +7,13 @@ import { db } from '@/lib/db'
 import { getEpisodeCompletionStatus } from '../data/episode'
 import { checkAdmin, checkOwner, checkUploader } from '@/lib/access'
 
-export const sendEpisodeApprovalRequest = async (
-  episodeId: string,
-): Promise<ActionType<EpisodeRequest>> => {
+export type SendEpisodeRequestProps = {
+  episodeId: string
+}
+
+export const sendEpisodeApprovalRequest = async ({
+  episodeId,
+}: SendEpisodeRequestProps): Promise<ActionType<EpisodeRequest>> => {
   try {
     await checkUploader()
 
@@ -67,9 +71,13 @@ export const sendEpisodeApprovalRequest = async (
   }
 }
 
-export const approvalEpisodeRequest = async (
-  requestId: string,
-): Promise<ActionType<EpisodeRequest>> => {
+export type ApprovalEpisodeRequestProps = {
+  requestId: string
+}
+
+export const approvalEpisodeRequest = async ({
+  requestId,
+}: ApprovalEpisodeRequestProps): Promise<ActionType<EpisodeRequest>> => {
   try {
     await checkAdmin()
 
@@ -94,9 +102,12 @@ export const approvalEpisodeRequest = async (
   }
 }
 
-export const rejectEpisodeRequest = async (
-  requestId: string,
-): Promise<ActionType<EpisodeRequest>> => {
+export type RejectEpisodeRequestProps = {
+  requestId: string
+}
+export const rejectEpisodeRequest = async ({
+  requestId,
+}: RejectEpisodeRequestProps): Promise<ActionType<EpisodeRequest>> => {
   try {
     await checkAdmin()
 

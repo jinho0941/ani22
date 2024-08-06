@@ -7,10 +7,15 @@ import { Video } from '@prisma/client'
 import { cookies } from 'next/headers'
 import { checkOwner } from '@/lib/access'
 
-export const createVideo = async (
-  title: string,
-  episodeId: string,
-): Promise<ActionType<Video>> => {
+export type CreateVideoProps = {
+  title: string
+  episodeId: string
+}
+
+export const createVideo = async ({
+  title,
+  episodeId,
+}: CreateVideoProps): Promise<ActionType<Video>> => {
   try {
     const userId = await getCurrentUserId()
 
@@ -27,6 +32,7 @@ export const createVideo = async (
 
     const newVideo = await db.video.create({
       data: {
+        userId,
         title,
         episodeId,
         order: newOrder,
@@ -47,9 +53,13 @@ export const createVideo = async (
   }
 }
 
-export const updateVideoOrder = async (
-  reorderedVideos: Video[],
-): Promise<ActionType<Video>> => {
+export type UpdateVideoOrder = {
+  reorderedVideos: Video[]
+}
+
+export const updateVideoOrder = async ({
+  reorderedVideos,
+}: UpdateVideoOrder): Promise<ActionType<Video>> => {
   try {
     const updatePromises = reorderedVideos.map((video) =>
       db.video.update({
@@ -73,19 +83,21 @@ export const updateVideoOrder = async (
   }
 }
 
+export type UpdateVideoProps = {
+  title?: string
+  url?: string
+  thumbnailUrl?: string
+  description?: string
+  videoId: string
+}
+
 export const updateVideo = async ({
   title,
   url,
   thumbnailUrl,
   description,
   videoId,
-}: {
-  title?: string
-  url?: string
-  thumbnailUrl?: string
-  description?: string
-  videoId: string
-}): Promise<ActionType<Video>> => {
+}: UpdateVideoProps): Promise<ActionType<Video>> => {
   try {
     if (!title && !url && !thumbnailUrl && !description)
       return { success: false, message: '아무런 값을 입력하지 않았습니다.' }
@@ -120,9 +132,12 @@ export const updateVideo = async ({
   }
 }
 
-export const increaseVideoCount = async (
-  videoId: string,
-): Promise<ActionType<null>> => {
+export type IncreaseVideoCountProps = {
+  videoId: string
+}
+export const increaseVideoCount = async ({
+  videoId,
+}: IncreaseVideoCountProps): Promise<ActionType<null>> => {
   try {
     const cookieStore = cookies()
     const viewCookie = cookieStore.get(`viewed_${videoId}`)

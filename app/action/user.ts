@@ -94,9 +94,13 @@ export const logout = async (): Promise<ActionType<null>> => {
   }
 }
 
-export const editUserImg = async (
-  imageUrl: string,
-): Promise<ActionType<User>> => {
+export type EditUserImgProps = {
+  imageUrl: string
+}
+
+export const editUserImg = async ({
+  imageUrl,
+}: EditUserImgProps): Promise<ActionType<User>> => {
   try {
     const userId = await getCurrentUserId()
 
@@ -122,7 +126,8 @@ export const editUserImg = async (
   }
 }
 
-export const editUserNickname = async (nickname: string) => {
+export type editUserNickNameProps = { nickname: string }
+export const editUserNickname = async ({ nickname }: editUserNickNameProps) => {
   try {
     const userId = await getCurrentUserId()
 
