@@ -5,6 +5,7 @@ import { getCurrentUserId } from '@/app/data/user'
 import { ActionType } from '@/type'
 import { Video } from '@prisma/client'
 import { cookies } from 'next/headers'
+import { revalidatePath } from 'next/cache'
 
 export type CreateVideoProps = {
   title: string
@@ -67,6 +68,7 @@ export const updateVideoOrder = async ({
 
     await db.$transaction(updatePromises)
 
+    revalidatePath('/edit/episode/[episodeId]', 'page')
     return {
       success: true,
       message: '비디오 순서가 성공적으로 업데이트되었습니다.',
