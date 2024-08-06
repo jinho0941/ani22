@@ -63,7 +63,7 @@ model Episode {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  userId         String            @unique
+  userId         String
   user           User              @relation(fields: [userId], references: [id])
   episodeRequest EpisodeRequest?
   videos         Video[]
@@ -81,12 +81,12 @@ model Video {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @default(now())
 
-  episodeId    String         @unique
+  episodeId    String
   episode      Episode        @relation(fields: [episodeId], references: [id], onDelete: Cascade)
   videoRequest VideoRequest?
   comments     VideoComment[]
 
-  userId String @unique
+  userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
@@ -99,14 +99,14 @@ model VideoComment {
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  videoId String @unique
+  videoId String
   video   Video  @relation(fields: [videoId], references: [id], onDelete: Cascade)
 }
 
 model EpisodeRequest {
   id          String        @id @default(cuid())
   episodeId   String        @unique
-  userId      String        @unique
+  userId      String
   requestDate DateTime      @default(now())
   status      RequestStatus @default(PENDING)
 
@@ -119,7 +119,7 @@ model EpisodeRequest {
 model VideoRequest {
   id          String        @id @default(cuid())
   videoId     String        @unique
-  userId      String        @unique
+  userId      String
   requestDate DateTime      @default(now())
   status      RequestStatus @default(PENDING)
 
@@ -146,10 +146,10 @@ model EpisodeFavorite {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
 
-  userId String @unique
+  userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  episodeId String  @unique
+  episodeId String
   episode   Episode @relation(fields: [episodeId], references: [id], onDelete: Cascade)
 
   @@unique([userId, episodeId])
