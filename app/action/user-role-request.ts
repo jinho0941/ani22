@@ -5,6 +5,7 @@ import { RequestStatus, UserRoleRequest } from '@prisma/client'
 import { getCurrentUserId, isCurrentUserUploaderOrAdmin } from '../data/user'
 import { db } from '@/lib/db'
 import { checkAdmin } from '@/lib/access'
+import { revalidatePath } from 'next/cache'
 
 export type SendUploaderApprovalRequestProps = {
   title: string
@@ -25,9 +26,8 @@ export const sendUploaderApprovalRequest = async ({
     const checkRequest = await db.userRoleRequest.findUnique({
       where: { userId },
     })
-    if (checkRequest!.id)
+    if (checkRequest)
       return { success: false, message: '이미 신청한 유저입니다.' }
-
     const userRoleRequest = await db.userRoleRequest.create({
       data: {
         userId,
@@ -38,12 +38,52 @@ export const sendUploaderApprovalRequest = async ({
     if (!userRoleRequest)
       return { success: false, message: '권한 요청이 생성되지 않았습니다.' }
 
+    revalidatePath('/general', 'page')
     return {
       success: true,
       message: '요청 생성에 성공하였습니다.',
       data: userRoleRequest,
     }
   } catch (error) {
+    console.log(error)
+    return { success: false, message: '유저 권한 생성에 실패하였습니다.' }
+  }
+}
+
+export const reSendUploaderApprovalRequest = async ({
+  title,
+  content,
+}: SendUploaderApprovalRequestProps): Promise<ActionType<UserRoleRequest>> => {
+  try {
+    const userId = await getCurrentUserId()
+
+    const isUploader = await isCurrentUserUploaderOrAdmin()
+    if (isUploader) {
+      return { success: false, message: '이미 권한이 있는 유저입니다.' }
+    }
+
+    const userRoleRequest = await db.userRoleRequest.update({
+      where: {
+        userId,
+      },
+      data: {
+        userId,
+        title,
+        content,
+        status: RequestStatus.PENDING,
+      },
+    })
+    if (!userRoleRequest)
+      return { success: false, message: '권한 요청이 생성되지 않았습니다.' }
+
+    revalidatePath('/general', 'page')
+    return {
+      success: true,
+      message: '요청 생성에 성공하였습니다.',
+      data: userRoleRequest,
+    }
+  } catch (error) {
+    console.log(error)
     return { success: false, message: '유저 권한 생성에 실패하였습니다.' }
   }
 }
@@ -69,6 +109,8 @@ export const approveUploaderRequest = async ({
 
     if (!request)
       return { success: false, message: '승인 요청에 실패하였습니다.' }
+
+    revalidatePath('/manage/user-request', 'page')
 
     return { success: true, message: '승인 요청에 성공하였습니다.' }
   } catch (error) {
@@ -96,6 +138,8 @@ export const rejectUploaderRequest = async ({
 
     if (!request)
       return { success: false, message: '승인 요청에 실패하였습니다.' }
+
+    revalidatePath('/manage/user-request', 'page')
 
     return { success: true, message: '승인 요청에 성공하였습니다.' }
   } catch (error) {

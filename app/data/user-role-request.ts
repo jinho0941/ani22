@@ -2,7 +2,7 @@
 
 import { db } from '@/lib/db'
 import { RoleRequestWithUser, WithCursor } from '@/type'
-import { UserRoleRequest } from '@prisma/client'
+import { RequestStatus, UserRoleRequest } from '@prisma/client'
 import { getCurrentUserId } from '@/app/data/user'
 
 export const getUserRoleRequests = async (
@@ -11,6 +11,9 @@ export const getUserRoleRequests = async (
 ): Promise<WithCursor<RoleRequestWithUser[]>> => {
   try {
     const requests = await db.userRoleRequest.findMany({
+      where: {
+        status: RequestStatus.PENDING,
+      },
       include: {
         user: true,
       },

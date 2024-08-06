@@ -4,6 +4,7 @@ import { RequestStatus, UserRole } from '@prisma/client'
 import { ArrowDown, ArrowRight } from 'lucide-react'
 import { RequestUserRoleButton } from './request-user-role-button'
 import { Button } from '@/components/ui/button'
+import { ReRequestUserRoleButton } from './re-request-user-role-button'
 
 type Props = {
   userImg: string
@@ -52,6 +53,8 @@ export const UserProfile = ({ userImg, username, role, status }: Props) => {
               </span>
               {status === RequestStatus.PENDING ? (
                 <Button disabled>신청중...</Button>
+              ) : status === RequestStatus.REJECTED ? (
+                <ReRequestUserRoleButton />
               ) : (
                 <RequestUserRoleButton />
               )}
