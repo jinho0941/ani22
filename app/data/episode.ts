@@ -4,6 +4,7 @@ import { db } from '@/lib/db'
 import { getCurrentUserId } from '@/app/data/user'
 import {
   EpisodeWithIsFavorite,
+  EpisodeWithRequest,
   EpisodeWithVideos,
   EpisodeWithVideosAndUser,
   WithCursor,
@@ -142,16 +143,27 @@ export const getMyFavoriteEpisodes = async (
 export const getMyUploadedEpisodes = async (
   cursor?: string,
   take = 10,
-): Promise<WithCursor<Episode[]>> => {
+  order?: 'new' | 'past',
+  search?: string,
+): Promise<WithCursor<EpisodeWithRequest[]>> => {
   try {
     const userId = await getCurrentUserId()
 
     const episodes = await db.episode.findMany({
       where: {
         userId,
+        ...(search && {
+          title: {
+            contains: search,
+            mode: 'insensitive',
+          },
+        }),
+      },
+      include: {
+        episodeRequest: true,
       },
       orderBy: {
-        createdAt: 'desc',
+        createdAt: order === 'new' ? 'desc' : 'asc',
       },
       take,
       ...(cursor && { cursor: { id: cursor } }),
@@ -163,7 +175,6 @@ export const getMyUploadedEpisodes = async (
 
     return { data: episodes, cursorId }
   } catch (error) {
-    console.log(error)
     throw new Error('에피소드를 가져오는 중에 에러가 발생하였습니다.')
   }
 }

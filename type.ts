@@ -31,6 +31,9 @@ export type EpisodeRequestWithUser = EpisodeRequest & { user: User }
 export type EpisodeWithIsFavorite = Episode & { isFavorite: boolean }
 export type EpisodeWithVideos = Episode & { videos: Video[] }
 export type EpisodeWithVideosAndUser = Episode & { videos: Video[]; user: User }
+export type EpisodeWithRequest = Episode & {
+  episodeRequest: EpisodeRequest | null
+}
 
 // user role request
 export type RoleRequestWithUser = UserRoleRequest & { user: User }
