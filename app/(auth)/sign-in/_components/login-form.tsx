@@ -56,7 +56,6 @@ export default function LoginForm() {
         toast.error(action.message)
         return
       }
-      toast.success(action.message)
       router.replace('/')
     })
   }
