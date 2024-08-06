@@ -22,6 +22,11 @@ export const sendUploaderApprovalRequest = async ({
     if (isUploader) {
       return { success: false, message: '이미 권한이 있는 유저입니다.' }
     }
+    const checkRequest = await db.userRoleRequest.findUnique({
+      where: { userId },
+    })
+    if (checkRequest!.id)
+      return { success: false, message: '이미 신청한 유저입니다.' }
 
     const userRoleRequest = await db.userRoleRequest.create({
       data: {
