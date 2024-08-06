@@ -15,10 +15,19 @@ export const getVideoByIdWithEpisodesAndComments = async (
       include: {
         episode: {
           include: {
-            videos: true,
+            videos: {
+              orderBy: {
+                order: 'asc',
+              },
+            },
           },
         },
-        comments: true,
+        comments: {
+          orderBy: { createdAt: 'desc' },
+          include: {
+            user: true,
+          },
+        },
       },
     })
     if (!video) throw new Error('존재하지 않는 비디오 입니다.')
