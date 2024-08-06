@@ -129,3 +129,39 @@ export const rejectEpisodeRequest = async ({
     return { success: false, message: '승인중에 에러가 발생하였습니다.' }
   }
 }
+
+export type DeleteEpisodeRequestProps = {
+  episodeId: string
+}
+export const deleteEpisodeRequest = async ({
+  episodeId,
+}: DeleteEpisodeRequestProps): Promise<ActionType<EpisodeRequest>> => {
+  try {
+    const userId = await getCurrentUserId()
+
+    const existingRequest = await db.episodeRequest.findFirst({
+      where: {
+        episodeId,
+        userId,
+        status: 'PENDING',
+      },
+    })
+
+    if (!existingRequest) {
+      return { success: false, message: '신청이 존재하지 않습니다.' }
+    }
+
+    await db.episodeRequest.delete({
+      where: {
+        id: existingRequest.id,
+      },
+    })
+
+    return {
+      success: true,
+      message: '신청이 취소되었습니다.',
+    }
+  } catch (error) {
+    return { success: false, message: '신청 취소 중에 에러가 발생하였습니다.' }
+  }
+}
