@@ -4,6 +4,8 @@ import { ActionType } from '@/type'
 import { Button } from '@/components/ui/button'
 import { useTransition } from 'react'
 import { toast } from 'sonner'
+import { useRouter } from 'next/navigation'
+import { cn } from '@/lib/utils'
 
 type Props<T, R> = {
   fn: (param: T) => Promise<ActionType<R>>
@@ -22,6 +24,7 @@ export const ActionButton = <T, R>({
   isToast = true,
   disabled,
 }: Props<T, R>) => {
+  const router = useRouter()
   const [isPending, startTransition] = useTransition()
 
   const onClick = () => {
@@ -32,6 +35,7 @@ export const ActionButton = <T, R>({
         return
       }
       isToast && toast.success(action.message)
+      router.refresh()
     })
   }
 
@@ -39,7 +43,7 @@ export const ActionButton = <T, R>({
     <Button
       disabled={isPending || disabled}
       onClick={onClick}
-      className={className}
+      className={cn('w-full', className)}
       type='button'
     >
       {children}
