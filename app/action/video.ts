@@ -136,7 +136,6 @@ export const increaseVideoCount = async ({
     const viewCookie = cookieStore.get(`viewed_${videoId}`)
 
     if (viewCookie) {
-      console.log('User has already increased view count.')
       return { success: false, message: '이미 조회수를 올린 유저입니다.' }
     }
 
@@ -149,7 +148,6 @@ export const increaseVideoCount = async ({
 
     return { success: true, message: '조회수 증가' }
   } catch (error) {
-    console.error('Error increasing view count:', error)
     return { success: false, message: '에러 발생' }
   }
 }
