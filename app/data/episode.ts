@@ -13,15 +13,39 @@ import { Episode, RequestStatus } from '@prisma/client'
 export const getEpisodesWithIsFavorite = async (
   cursor?: string,
   take = 10,
+  search?: string,
 ): Promise<WithCursor<EpisodeWithIsFavorite[]>> => {
   try {
     const userId = await getCurrentUserId()
 
+    const searchCondition = search
+      ? {
+          OR: [
+            {
+              title: {
+                contains: search,
+                mode: 'insensitive' as const,
+              },
+            },
+            {
+              categories: {
+                has: search,
+              },
+            },
+          ],
+        }
+      : {}
+
     const episodes = await db.episode.findMany({
       where: {
-        episodeRequest: {
-          status: RequestStatus.APPROVED,
-        },
+        AND: [
+          {
+            episodeRequest: {
+              status: RequestStatus.APPROVED,
+            },
+          },
+          searchCondition,
+        ],
       },
       include: {
         favorites: {
