@@ -1,7 +1,11 @@
 'use server'
 
 import { db } from '@/lib/db'
-import { VideoWithEpisodesAndComments, VideoWithUser } from '@/type'
+import {
+  VideoWithEpisodesAndComments,
+  VideoWithRequest,
+  VideoWithUser,
+} from '@/type'
 import { Video } from '@prisma/client'
 
 export const getVideoByIdWithEpisodesAndComments = async (
@@ -38,11 +42,16 @@ export const getVideoByIdWithEpisodesAndComments = async (
   }
 }
 
-export const getVideoById = async (videoId: string): Promise<Video> => {
+export const getVideoWithRequestById = async (
+  videoId: string,
+): Promise<VideoWithRequest> => {
   try {
     const video = await db.video.findUnique({
       where: {
         id: videoId,
+      },
+      include: {
+        videoRequest: true,
       },
     })
     if (!video) throw new Error('존재하지 않는 비디오 입니다.')
