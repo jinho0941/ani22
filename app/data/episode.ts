@@ -79,8 +79,10 @@ export const getEpisodesWithIsFavorite = async (
 
 export const getEpisodeByIdWithVideos = async (
   episodeId: string,
+  orderType?: 'new' | 'past',
 ): Promise<EpisodeWithVideos> => {
   try {
+    const order = orderType === 'past' ? ('asc' as const) : ('desc' as const)
     const episode = await db.episode.findUnique({
       where: {
         id: episodeId,
@@ -88,7 +90,7 @@ export const getEpisodeByIdWithVideos = async (
       include: {
         videos: {
           orderBy: {
-            order: 'desc',
+            order,
           },
         },
       },
