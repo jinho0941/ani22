@@ -11,6 +11,7 @@ import { cn } from '@/lib/utils'
 import {
   deleteEpisodeRequest,
   sendEpisodeApprovalRequest,
+  setPendingEpisodeRequest,
 } from '@/app/action/episode-request'
 import { useRouter } from 'next/navigation'
 
@@ -44,7 +45,7 @@ export const StatusBanner = ({
 
   const handleReRequestPublish = () => {
     startTransition(async () => {
-      const action = await sendEpisodeApprovalRequest({ episodeId })
+      const action = await setPendingEpisodeRequest({ episodeId })
       if (action.success) {
         toast.success(action.message)
         router.refresh()

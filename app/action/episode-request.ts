@@ -165,3 +165,33 @@ export const deleteEpisodeRequest = async ({
     return { success: false, message: '신청 취소 중에 에러가 발생하였습니다.' }
   }
 }
+
+export type SetPendingEpisodeRequestProps = {
+  episodeId: string
+}
+export const setPendingEpisodeRequest = async ({
+  episodeId,
+}: SetPendingEpisodeRequestProps): Promise<ActionType<EpisodeRequest>> => {
+  try {
+    const checkRequest = await db.episodeRequest.findUnique({
+      where: {
+        episodeId,
+      },
+    })
+    if (!checkRequest)
+      return { success: false, message: '존재하지 않는 요청입니다.' }
+
+    const request = await db.episodeRequest.update({
+      where: {
+        episodeId,
+      },
+      data: {
+        status: RequestStatus.PENDING,
+      },
+    })
+
+    return { success: true, message: '신청 상태를 업데이트 하였습니다.' }
+  } catch (error) {
+    return { success: false, message: '신청 변경 중에 에러가 발생하였습니다.' }
+  }
+}
