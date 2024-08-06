@@ -40,7 +40,11 @@ export type VideoRequestWithUser = VideoRequest & { user: User }
 
 // video
 export type VideoWithEpisodesAndComments = Video & {
-  episode: Episode & { videos: Video[] }
-  comments: VideoComment[]
+  episode: Episode & {
+    videos: Video[]
+  }
+  comments: (VideoComment & {
+    user: User
+  })[]
 }
 export type VideoWithUser = Video & { user: User }
