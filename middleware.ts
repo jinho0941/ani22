@@ -16,7 +16,6 @@ export default auth(async (req) => {
   const isApiUploadthingRoute = nextUrl.pathname.startsWith(
     `/${apiUploadThingPrefix}`,
   )
-  const isPublicRoute = publicRoutes.includes(nextUrl.pathname)
   const isAuthRoute = authRoutes.includes(nextUrl.pathname)
 
   const isFirst = req.cookies.has('isFirstLogin')
@@ -37,7 +36,7 @@ export default auth(async (req) => {
     return NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl))
   }
 
-  if (!isLoggedIn && !isPublicRoute) {
+  if (!isLoggedIn && !isAuthRoute) {
     return NextResponse.redirect(new URL('/sign-in', nextUrl))
   }
 
