@@ -26,7 +26,7 @@ export const CreateEpisodeRequest = ({
       >
         create episode request
       </ActionButton>
-      <div className='p-4 bg-white space-y-2 rounded-md'>
+      <div className='p-4 bg-slate-500 space-y-2 rounded-md'>
         <div>requestStatus: {request ? request.status : '요청없음'}</div>
         <div className='font-bold'>Episode Info</div>
         <ActionButton<UpdateEpisodeProps, Episode>

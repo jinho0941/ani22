@@ -20,9 +20,9 @@ export const CreateVideoComment = ({ videoId, comments }: Props) => {
       >
         create video comment
       </ActionButton>
-      <div className='bg-white rounded-md h-80 overflow-y-scroll scrollbar-hide space-y-2 p-4'>
+      <div className='bg-slate-500 rounded-md h-80 overflow-y-scroll scrollbar-hide space-y-2 p-4'>
         {comments.map((comment) => (
-          <div key={comment.id} className='p-2 bg-slate-200 rounded-md'>
+          <div key={comment.id} className='p-2 bg-slate-600 rounded-md'>
             {comment.content}
           </div>
         ))}

@@ -24,7 +24,7 @@ export const CreateVideoRequest = ({ request, videoId, video }: Props) => {
       >
         create video request
       </ActionButton>
-      <div className='bg-white p-4 rounded-md space-y-2'>
+      <div className='bg-slate-500 p-4 rounded-md space-y-2'>
         <div>status: {request ? request.status : '요청 없음'}</div>
         <ActionButton<UpdateVideoProps, Video>
           fn={updateVideo}

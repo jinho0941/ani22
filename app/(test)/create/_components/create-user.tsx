@@ -20,9 +20,11 @@ export const CreateUser = ({ users }: Props) => {
       >
         Create User
       </ActionButton>
-      <div className='bg-white rounded-md h-80 text-white overflow-y-scroll p-4 flex flex-col gap-y-2 scrollbar-hide'>
+      <div className='bg-slate-500 rounded-md h-80  overflow-y-scroll p-4 flex flex-col gap-y-2 scrollbar-hide'>
         {users.map((user) => (
-          <Button>{user.email}</Button>
+          <span key={user.email} className='text-black'>
+            {user.email}
+          </span>
         ))}
       </div>
     </div>

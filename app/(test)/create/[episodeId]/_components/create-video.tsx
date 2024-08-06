@@ -19,7 +19,7 @@ export const CreateVideo = ({ episodeId, videos }: Props) => {
       >
         create video
       </ActionButton>
-      <div className='p-4 bg-white rounded-md flex flex-col gap-y-2 overflow-y-scroll scrollbar-hide h-80'>
+      <div className='p-4 bg-slate-500 rounded-md flex flex-col gap-y-2 overflow-y-scroll scrollbar-hide h-80'>
         {videos.map((video) => (
           <Button key={video.id} asChild>
             <Link href={`/create/${episodeId}/${video.id}`}>{video.title}</Link>
