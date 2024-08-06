@@ -5,6 +5,7 @@ import { getCurrentUserId } from '@/app/data/user'
 import {
   EpisodeWithIsFavorite,
   EpisodeWithRequest,
+  EpisodeWithRequestAndVideos,
   EpisodeWithVideos,
   EpisodeWithVideosAndUser,
   WithCursor,
@@ -264,11 +265,21 @@ export const getEpisodeCompletionStatus = async (
   }
 }
 
-export const getEpisodeById = async (episodeId: string): Promise<Episode> => {
+export const getEpisodeWithRequestAndVideosById = async (
+  episodeId: string,
+): Promise<EpisodeWithRequestAndVideos> => {
   try {
     const episode = await db.episode.findUnique({
       where: {
         id: episodeId,
+      },
+      include: {
+        videos: {
+          include: {
+            videoRequest: true,
+          },
+        },
+        episodeRequest: true,
       },
     })
 

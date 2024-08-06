@@ -34,6 +34,10 @@ export type EpisodeWithVideosAndUser = Episode & { videos: Video[]; user: User }
 export type EpisodeWithRequest = Episode & {
   episodeRequest: EpisodeRequest | null
 }
+export type EpisodeWithRequestAndVideos = Episode & {
+  episodeRequest: EpisodeRequest | null
+  videos: VideoWithRequest[]
+}
 
 // user role request
 export type RoleRequestWithUser = UserRoleRequest & { user: User }
@@ -51,3 +55,4 @@ export type VideoWithEpisodesAndComments = Video & {
   })[]
 }
 export type VideoWithUser = Video & { user: User }
+export type VideoWithRequest = Video & { videoRequest: VideoRequest | null }
