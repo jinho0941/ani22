@@ -107,7 +107,7 @@ export const getEpisodeByIdWithVideos = async (
 export const getMyFavoriteEpisodes = async (
   cursor?: string,
   take = 10,
-): Promise<WithCursor<Episode[]>> => {
+): Promise<WithCursor<EpisodeWithIsFavorite[]>> => {
   try {
     const userId = await getCurrentUserId()
 
@@ -128,7 +128,12 @@ export const getMyFavoriteEpisodes = async (
     const lastEpisode = episodes[episodes.length - 1]
     const cursorId = lastEpisode ? lastEpisode.id : null
 
-    return { data: episodes, cursorId }
+    const episodeWithFavorite = episodes.map((episode) => ({
+      ...episode,
+      isFavorite: true,
+    }))
+
+    return { data: episodeWithFavorite, cursorId }
   } catch (error) {
     throw new Error('에피소드를 가져오는 중에 에러가 발생하였습니다.')
   }
