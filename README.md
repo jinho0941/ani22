@@ -69,3 +69,53 @@ server
 
 <img src="https://github.com/user-attachments/assets/4d67fae8-d400-4e22-b8b4-6a605f568723" width="50%" height="50%"/>
 
+업로더는 에피소드를 등록하고 항목을 채워서 배포 신청을 해야합니다.
+
+<img src="https://github.com/user-attachments/assets/8a340cbf-9ef0-42fd-90ad-781198cdf785" width="50%" height="50%"/>
+
+<img src="https://github.com/user-attachments/assets/400c27d1-ac59-4e6c-8c94-0aa726164a0a" width="50%" height="50%"/>
+
+<img src="https://github.com/user-attachments/assets/0c05cf29-23bb-4c89-9e3c-995d4ccdf5c2" width="50%" height="50%"/>
+
+<img src="https://github.com/user-attachments/assets/d561e301-2861-40df-ac41-9845eaa38096" width="50%" height="50%"/>
+
+관리자가 승인을 하면 해당 에피소드는 배포가 됩니다.
+
+<img src="https://github.com/user-attachments/assets/db2b6316-4004-45e5-b99f-8b811a4f808d" width="50%" height="50%"/>
+
+<img src="https://github.com/user-attachments/assets/a2a3b3d2-d0b7-4c00-a375-54b61b01e965" width="50%" height="50%"/>
+
+<img src="https://github.com/user-attachments/assets/c859093d-7de8-4ac9-882f-21fbacdec398" width="50%" height="50%"/>
+
+<img src="https://github.com/user-attachments/assets/60e58136-3e3e-4f72-8b80-9091441a9ad2" width="50%" height="50%"/>
+
+또한 해당 에피소드의 비디오를 등록하며 해당 비디오도 에피소드와 같은 절차를 거쳐서 배포가 됩니다.
+
+<img src="https://github.com/user-attachments/assets/ea07223e-febe-44b4-83cc-8042a1c7a091" width="50%" height="50%"/>
+
+<img src="https://github.com/user-attachments/assets/57443d6e-b9a1-4c6e-9de2-6010eb86a239" width="50%" height="50%"/>
+
+<img src="https://github.com/user-attachments/assets/a30aa0f2-ba57-4e25-b2c5-d094fc864351" width="50%" height="50%"/>
+
+<img src="https://github.com/user-attachments/assets/1eb3887a-dd57-4a14-9488-f6e330f8f633" width="50%" height="50%"/>
+
+<img src="https://github.com/user-attachments/assets/10af389f-85c0-445e-b7ad-addfcdd965c6" width="50%" height="50%"/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
