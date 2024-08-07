@@ -29,7 +29,7 @@ export const RequestList = ({ requests, cursorId }: Props) => {
     setInitCursorId(cursorId)
   }, [requests, cursorId])
 
-  const loadMoreEpisodes = async () => {
+  const loadMore = async () => {
     startTransition(async () => {
       if (!initCursorId) return
       const result = await getEpisodeRequestsWithUser(initCursorId, 2)
@@ -39,7 +39,7 @@ export const RequestList = ({ requests, cursorId }: Props) => {
   }
 
   const observer = useInfiniteScroll({
-    callback: loadMoreEpisodes,
+    callback: loadMore,
     cursorId: initCursorId,
     isLoading: isPending,
   })

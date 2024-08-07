@@ -52,7 +52,10 @@ export type EpisodeWithUserAndRequestAndVideos = Episode & {
 export type RoleRequestWithUser = UserRoleRequest & { user: User }
 
 // video request
-export type VideoRequestWithUser = VideoRequest & { user: User }
+export type VideoRequestWithUserAndVideo = VideoRequest & {
+  user: User
+  video: Video
+}
 
 // video
 export type VideoWithEpisodesAndComments = Video & {

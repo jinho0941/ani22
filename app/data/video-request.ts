@@ -2,7 +2,7 @@
 
 import { checkAdmin } from '@/lib/access'
 import { db } from '@/lib/db'
-import { VideoRequestWithUser, WithCursor } from '@/type'
+import { VideoRequestWithUserAndVideo, WithCursor } from '@/type'
 import { VideoRequest } from '@prisma/client'
 
 export const getVideoRequestByVideoId = async (
@@ -21,19 +21,23 @@ export const getVideoRequestByVideoId = async (
   }
 }
 
-export const getVideoRequestsWithUser = async (
+export const getVideoRequestsWithUserAndVideo = async (
   cursor?: string,
   take = 10,
-): Promise<WithCursor<VideoRequestWithUser[]>> => {
+): Promise<WithCursor<VideoRequestWithUserAndVideo[]>> => {
   try {
     await checkAdmin()
 
     const requests = await db.videoRequest.findMany({
+      where: {
+        status: 'PENDING',
+      },
       include: {
         user: true,
+        video: true,
       },
       orderBy: {
-        createdAt: 'asc',
+        createdAt: 'desc',
       },
       take,
       ...(cursor && { cursor: { id: cursor } }),

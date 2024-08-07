@@ -2,15 +2,15 @@
 
 import { useEffect, useState, useTransition } from 'react'
 
-import { getUserRoleRequests } from '@/app/data/user-role-request'
 import useInfiniteScroll from '@/app/hooks/use-infinite-scroll'
 import { Skeleton } from '@/components/ui/skeleton'
-import { RoleRequestWithUser } from '@/type'
+import { VideoRequestWithUserAndVideo } from '@/type'
 
 import { RequestItem } from './request-item'
+import { getVideoRequestsWithUserAndVideo } from '@/app/data/video-request'
 
 type Props = {
-  requests: RoleRequestWithUser[]
+  requests: VideoRequestWithUserAndVideo[]
   cursorId: string | null
 }
 export const RequestList = ({ requests, cursorId }: Props) => {
@@ -32,7 +32,7 @@ export const RequestList = ({ requests, cursorId }: Props) => {
   const loadMore = async () => {
     startTransition(async () => {
       if (!initCursorId) return
-      const result = await getUserRoleRequests(initCursorId, 2)
+      const result = await getVideoRequestsWithUserAndVideo(initCursorId, 2)
       setInitRequests((prev) => [...prev, ...result.data])
       setInitCursorId(result.cursorId)
     })
