@@ -2,6 +2,7 @@ import { useEffect, useState, useTransition } from 'react'
 
 import { getMyUploadedEpisodes } from '@/app/data/episode'
 import { EpisodeWithRequest } from '@/type'
+import { take } from '@/constants'
 
 export const useEpisodeList = (
   initialEpisodes: EpisodeWithRequest[],
@@ -21,7 +22,7 @@ export const useEpisodeList = (
   const loadMoreEpisodes = async () => {
     startTransition(async () => {
       if (!cursorId) return
-      const result = await getMyUploadedEpisodes(cursorId, 2, order, search)
+      const result = await getMyUploadedEpisodes(cursorId, take, order, search)
       setEpisodes((prev) => [...prev, ...result.data])
       setCursorId(result.cursorId)
     })

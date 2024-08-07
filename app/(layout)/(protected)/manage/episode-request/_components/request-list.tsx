@@ -8,6 +8,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { EpisodeRequestWithUser } from '@/type'
 
 import { RequestItem } from './request-item'
+import { take } from '@/constants'
 
 type Props = {
   requests: EpisodeRequestWithUser[]
@@ -18,7 +19,7 @@ export const RequestList = ({ requests, cursorId }: Props) => {
   const [initRequests, setInitRequests] = useState(requests)
   const [initCursorId, setInitCursorId] = useState(cursorId)
 
-  const skeletonCard = Array.from({ length: 5 }, (_, index) => (
+  const skeletonCard = Array.from({ length: take }, (_, index) => (
     <div key={index}>
       <Skeleton className='h-14 w-full rounded-t-md my-2' />
     </div>
@@ -32,7 +33,7 @@ export const RequestList = ({ requests, cursorId }: Props) => {
   const loadMore = async () => {
     startTransition(async () => {
       if (!initCursorId) return
-      const result = await getEpisodeRequestsWithUser(initCursorId, 2)
+      const result = await getEpisodeRequestsWithUser(initCursorId, take)
       setInitRequests((prev) => [...prev, ...result.data])
       setInitCursorId(result.cursorId)
     })

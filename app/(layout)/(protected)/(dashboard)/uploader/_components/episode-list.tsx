@@ -6,6 +6,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { EpisodeWithRequest } from '@/type'
 
 import { EpisodeCard } from './episode-card'
+import { take } from '@/constants'
 
 type Props = {
   episodes: EpisodeWithRequest[]
@@ -22,7 +23,7 @@ export const EpisodeList = ({ episodes, cursorId, search, order }: Props) => {
     cursorId: initCursorId,
   } = useEpisodeList(episodes, cursorId, search, order)
 
-  const skeletonCard = Array.from({ length: 5 }, (_, index) => (
+  const skeletonCard = Array.from({ length: take }, (_, index) => (
     <div key={index}>
       <Skeleton className='aspect-[4/5] rounded-t-md' />
     </div>
