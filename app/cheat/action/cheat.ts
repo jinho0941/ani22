@@ -140,7 +140,9 @@ export const createPendingEpisodes = async (count: number = 10) => {
     const episode = await db.episode.create({
       data: {
         title: faker.lorem.sentence(),
-        airDate: faker.date.future(),
+        airDate: faker.date.past(),
+        endDate: faker.date.future(),
+        totalEpisodeCount: faker.number.int({ min: 3, max: 13 }),
         description: faker.lorem.paragraph(),
         thumbnailUrl: faker.image.url(),
         categories: faker.word.words(3).split(' '),
