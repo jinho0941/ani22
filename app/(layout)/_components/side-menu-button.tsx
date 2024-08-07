@@ -23,8 +23,8 @@ type Props = {
 }
 
 const menuItems = [
-  { href: '/my-page', icon: Home, label: '홈' },
-  { href: '/', icon: User, label: '내 정보' },
+  { href: '/', icon: Home, label: '홈' },
+  { href: '/my-page', icon: User, label: '내 정보' },
   { href: '/general', icon: LayoutDashboard, label: '대시보드' },
 ]
 
