@@ -2,7 +2,7 @@
 
 import { signIn, signOut } from '@/auth'
 import { db } from '@/lib/db'
-import { hashPassword } from '@/lib/utils'
+import { hashPassword, verifyPassword } from '@/lib/utils'
 import { LoginSchema, RegisterSchema } from '@/schema'
 import { ActionType, LoginSchemaType, RegisterSchemaType } from '@/type'
 import { User } from '@prisma/client'
@@ -183,5 +183,43 @@ export const createUser = async ({
     }
   } catch (error) {
     return { success: false, message: '회원가입 중에 에러가 발생하였습니다.' }
+  }
+}
+
+export type EditUserPasswordProps = {
+  currentPassword: string
+  newPassword: string
+}
+
+export const editUserPassword = async ({
+  currentPassword,
+  newPassword,
+}: EditUserPasswordProps) => {
+  try {
+    const userId = await getCurrentUserId()
+    const user = await db.user.findUnique({ where: { id: userId } })
+
+    if (!user) {
+      return { success: false, message: '사용자를 찾을 수 없습니다.' }
+    }
+
+    const isPasswordValid = verifyPassword(currentPassword, user.password)
+    if (!isPasswordValid) {
+      return { success: false, message: '현재 비밀번호가 일치하지 않습니다.' }
+    }
+
+    const hashedNewPassword = hashPassword(newPassword)
+
+    await db.user.update({
+      where: { id: userId },
+      data: { password: hashedNewPassword },
+    })
+
+    return { success: true, message: '비밀번호가 성공적으로 변경되었습니다.' }
+  } catch (error) {
+    return {
+      success: false,
+      message: '비밀번호 변경 중 오류가 발생했습니다.',
+    }
   }
 }
