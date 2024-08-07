@@ -121,6 +121,7 @@ export const findEpisodeTitleByTitle = async (
       select: {
         title: true,
       },
+      take: 10,
     })
     const titleList = episodes.map((episode) => episode.title)
 
