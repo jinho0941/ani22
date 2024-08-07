@@ -15,3 +15,5 @@ export const videoUrls = [
   'https://utfs.io/f/c5e37a8f-2ae2-4911-84ed-ffe37afb17a0-8qjsy3.mp4',
   'https://utfs.io/f/05143615-0cb4-48c0-b031-66a427e5f017-qm4u2t.mp4',
 ]
+
+export const take = 6
