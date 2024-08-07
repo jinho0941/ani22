@@ -114,6 +114,8 @@ export const getMyFavoriteEpisodes = async (
   cursor?: string,
   take = 10,
 ): Promise<WithCursor<EpisodeWithIsFavorite[]>> => {
+  const email = await getCurrentUserEmail()
+  if (!email) return { data: [], cursorId: null }
   try {
     const userId = await getCurrentUserId()
     if (!userId) throw new Error('로그인을 해주세요.')
