@@ -43,7 +43,7 @@ export default function LoginForm() {
   const form = useForm<LoginSchemaType>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
-      email: '',
+      email: 'admin@mail.com',
       password: 'test1234',
     },
     mode: 'onBlur',
