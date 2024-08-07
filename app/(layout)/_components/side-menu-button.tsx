@@ -13,7 +13,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet'
-import { Home, LayoutDashboard, LogOut, Menu, User } from 'lucide-react'
+import { Drama, Home, LayoutDashboard, LogOut, Menu, User } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
@@ -26,6 +26,7 @@ const menuItems = [
   { href: '/', icon: Home, label: '홈' },
   { href: '/my-page', icon: User, label: '내 정보' },
   { href: '/general', icon: LayoutDashboard, label: '대시보드' },
+  { href: '/cheat', icon: Drama, label: '치트' },
 ]
 
 export const SideMenuButton = ({ username, userImg }: Props) => {

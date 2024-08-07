@@ -6,6 +6,7 @@ import { UserButton } from './user-button'
 import { DashboardButton } from './dashboard-button'
 import { ModeToggle } from './mode-toggle'
 import { SideMenuButton } from './side-menu-button'
+import { CheatButton } from './cheat-button'
 
 export const Navbar = async () => {
   const user = await getCurrentUser()
@@ -24,6 +25,7 @@ export const Navbar = async () => {
         </div>
         <div className='md:flex hidden justify-end gap-x-4'>
           <ModeToggle />
+          <CheatButton />
           <DashboardButton />
           <UserButton imgUrl={user.imageUrl!} />
         </div>
