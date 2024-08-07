@@ -3,7 +3,7 @@
 import { checkAdmin } from '@/lib/access'
 import { db } from '@/lib/db'
 import { EpisodeRequestWithUser, WithCursor } from '@/type'
-import { EpisodeRequest } from '@prisma/client'
+import { EpisodeRequest, RequestStatus } from '@prisma/client'
 
 export const getEpisodeRequestsWithUser = async (
   cursor?: string,
@@ -13,8 +13,12 @@ export const getEpisodeRequestsWithUser = async (
     await checkAdmin()
 
     const requests = await db.episodeRequest.findMany({
+      where: {
+        status: RequestStatus.PENDING,
+      },
       include: {
         user: true,
+        episode: true,
       },
       orderBy: {
         createdAt: 'desc',

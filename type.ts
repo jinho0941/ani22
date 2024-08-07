@@ -25,7 +25,10 @@ export type RegisterSchemaType = z.infer<typeof RegisterSchema>
 export type LoginSchemaType = z.infer<typeof LoginSchema>
 
 // episode request
-export type EpisodeRequestWithUser = EpisodeRequest & { user: User }
+export type EpisodeRequestWithUser = EpisodeRequest & {
+  user: User
+  episode: Episode
+}
 
 // episode
 export type EpisodeWithIsFavorite = Episode & { isFavorite: boolean }
