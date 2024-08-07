@@ -148,7 +148,7 @@ server
 ### 마지막으로 데이터 생성을 위해 만든 치트 페이지 입니다.
 해당 페이지에서 더미 데이터를 손쉽게 생성할수 있습니다.
 
-<img src="https://github.com/user-attachments/assets/65c03db4-088e-4777-b20e-cd1c3b503349" width="50%" height="50%"/>
+<img src="https://github.com/user-attachments/assets/65c03db4-088e-4777-b20e-cd1c3b503349" width="80%" height="50%"/>
 
 
 
