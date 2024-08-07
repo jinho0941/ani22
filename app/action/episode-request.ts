@@ -2,11 +2,13 @@
 
 import { ActionType } from '@/type'
 import { EpisodeRequest, RequestStatus } from '@prisma/client'
-import { getCurrentUserId, isCurrentUserAdmin } from '@/app/data/user'
+import {
+  getCurrentUserId,
+  isCurrentUserAdmin,
+  isCurrentUserUploaderOrAdmin,
+} from '@/app/data/user'
 import { db } from '@/lib/db'
 import { getEpisodeCompletionStatus } from '../data/episode'
-import { checkAdmin, checkUploader } from '@/lib/access'
-
 export type SendEpisodeApprovalRequestProps = {
   episodeId: string
 }
@@ -15,9 +17,19 @@ export const sendEpisodeApprovalRequest = async ({
   episodeId,
 }: SendEpisodeApprovalRequestProps): Promise<ActionType<EpisodeRequest>> => {
   try {
-    await checkUploader()
-
     const userId = await getCurrentUserId()
+    if (!userId)
+      return {
+        success: false,
+        message: '현재 로그인이 되어있지 않습니다.',
+      }
+
+    const isUploader = await isCurrentUserUploaderOrAdmin()
+    if (!isUploader)
+      return {
+        success: false,
+        message: '권한이 없는 유저입니다.',
+      }
 
     const existingRequest = await db.episodeRequest.findFirst({
       where: {
@@ -77,7 +89,13 @@ export const approvalEpisodeRequest = async ({
   requestId,
 }: ApprovalEpisodeRequestProps): Promise<ActionType<EpisodeRequest>> => {
   try {
-    await checkAdmin()
+    const isAdmin = await isCurrentUserAdmin()
+
+    if (!isAdmin)
+      return {
+        success: false,
+        message: '권한이 없는 유저입니다.',
+      }
 
     const episodeRequest = await db.episodeRequest.update({
       where: {
@@ -107,7 +125,13 @@ export const rejectEpisodeRequest = async ({
   requestId,
 }: RejectEpisodeRequestProps): Promise<ActionType<EpisodeRequest>> => {
   try {
-    await checkAdmin()
+    const isAdmin = await isCurrentUserAdmin()
+
+    if (!isAdmin)
+      return {
+        success: false,
+        message: '권한이 없는 유저입니다.',
+      }
 
     const episodeRequest = await db.episodeRequest.update({
       where: {
@@ -138,6 +162,11 @@ export const deleteEpisodeRequest = async ({
 }: DeleteEpisodeRequestProps): Promise<ActionType<EpisodeRequest>> => {
   try {
     const userId = await getCurrentUserId()
+    if (!userId)
+      return {
+        success: false,
+        message: '현재 로그인이 되어있지 않습니다.',
+      }
 
     const existingRequest = await db.episodeRequest.findFirst({
       where: {

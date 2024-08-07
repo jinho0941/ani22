@@ -3,12 +3,11 @@ import {
   apiAuthPrefix,
   apiUploadThingPrefix,
   authRoutes,
-  publicRoutes,
 } from '@/routes'
 import { auth } from './auth'
 import { NextResponse } from 'next/server'
 
-export default auth(async (req) => {
+export default auth((req) => {
   const { nextUrl } = req
   const isLoggedIn = !!req.auth
 
@@ -18,18 +17,8 @@ export default auth(async (req) => {
   )
   const isAuthRoute = authRoutes.includes(nextUrl.pathname)
 
-  const isFirst = req.cookies.has('isFirstLogin')
-  if (nextUrl.pathname !== '/topic') {
-    if (isLoggedIn && isFirst) {
-      return NextResponse.redirect(new URL('/topic', nextUrl))
-    }
-  }
-
-  if (isApiAuthRoute) {
-    return
-  }
-  if (isApiUploadthingRoute) {
-    return
+  if (isApiAuthRoute || isApiUploadthingRoute) {
+    return NextResponse.next()
   }
 
   if (isAuthRoute && isLoggedIn) {

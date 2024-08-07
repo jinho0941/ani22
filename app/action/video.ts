@@ -18,6 +18,11 @@ export const createVideo = async ({
 }: CreateVideoProps): Promise<ActionType<Video>> => {
   try {
     const userId = await getCurrentUserId()
+    if (!userId)
+      return {
+        success: false,
+        message: '현재 로그인이 되어있지 않습니다.',
+      }
 
     const maxOrderVideo = await db.video.findFirst({
       where: { episodeId },
@@ -43,7 +48,6 @@ export const createVideo = async ({
       data: newVideo,
     }
   } catch (error) {
-    console.error('Error creating video:', error)
     return {
       success: false,
       message: '비디오 생성 중에 에러가 발생하였습니다.',

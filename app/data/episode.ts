@@ -1,7 +1,7 @@
 'use server'
 
 import { db } from '@/lib/db'
-import { getCurrentUserId } from '@/app/data/user'
+import { getCurrentUserEmail, getCurrentUserId } from '@/app/data/user'
 import {
   EpisodeWithIsFavorite,
   EpisodeWithRequest,
@@ -11,15 +11,18 @@ import {
   EpisodeWithVideosAndUser,
   WithCursor,
 } from '@/type'
-import { Episode, RequestStatus } from '@prisma/client'
+import { RequestStatus } from '@prisma/client'
 
 export const getEpisodesWithIsFavorite = async (
   cursor?: string,
   take = 10,
   search?: string,
 ): Promise<WithCursor<EpisodeWithIsFavorite[]>> => {
+  const email = await getCurrentUserEmail()
+  if (!email) return { data: [], cursorId: null }
   try {
     const userId = await getCurrentUserId()
+    if (!userId) throw new Error('로그인을 해주세요.')
 
     const searchCondition = search
       ? {
@@ -113,6 +116,7 @@ export const getMyFavoriteEpisodes = async (
 ): Promise<WithCursor<EpisodeWithIsFavorite[]>> => {
   try {
     const userId = await getCurrentUserId()
+    if (!userId) throw new Error('로그인을 해주세요.')
 
     const episodes = await db.episode.findMany({
       where: {
@@ -150,6 +154,7 @@ export const getMyUploadedEpisodes = async (
 ): Promise<WithCursor<EpisodeWithRequest[]>> => {
   try {
     const userId = await getCurrentUserId()
+    if (!userId) throw new Error('로그인을 해주세요.')
 
     const episodes = await db.episode.findMany({
       where: {
@@ -307,7 +312,6 @@ export const getEpisodeByIdWithUserAndRequest = async (
 
     return episode!
   } catch (error) {
-    console.log(error)
     throw new Error('에피소드를 가져오는중에 에러가 발생하였습니다.')
   }
 }

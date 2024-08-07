@@ -40,6 +40,7 @@ export const getCurrentUserRoleRequest =
   async (): Promise<UserRoleRequest | null> => {
     try {
       const userId = await getCurrentUserId()
+      if (!userId) throw new Error('로그인을 해주세요.')
 
       const userRoleRequest = await db.userRoleRequest.findUnique({
         where: {

@@ -1,6 +1,5 @@
 'use server'
 
-import { checkAdmin } from '@/lib/access'
 import { db } from '@/lib/db'
 import { EpisodeRequestWithUser, WithCursor } from '@/type'
 import { EpisodeRequest, RequestStatus } from '@prisma/client'
@@ -10,8 +9,6 @@ export const getEpisodeRequestsWithUser = async (
   take = 10,
 ): Promise<WithCursor<EpisodeRequestWithUser[]>> => {
   try {
-    await checkAdmin()
-
     const requests = await db.episodeRequest.findMany({
       where: {
         status: RequestStatus.PENDING,
@@ -41,7 +38,6 @@ export const getEpisodeRequestByEpisodeId = async (
   episodeId: string,
 ): Promise<EpisodeRequest | null> => {
   try {
-    // await checkAdmin()
     const request = await db.episodeRequest.findUnique({
       where: {
         episodeId,

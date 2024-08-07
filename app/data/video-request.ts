@@ -1,6 +1,4 @@
 'use server'
-
-import { checkAdmin } from '@/lib/access'
 import { db } from '@/lib/db'
 import { VideoRequestWithUserAndVideo, WithCursor } from '@/type'
 import { VideoRequest } from '@prisma/client'
@@ -26,8 +24,6 @@ export const getVideoRequestsWithUserAndVideo = async (
   take = 10,
 ): Promise<WithCursor<VideoRequestWithUserAndVideo[]>> => {
   try {
-    await checkAdmin()
-
     const requests = await db.videoRequest.findMany({
       where: {
         status: 'PENDING',

@@ -2,10 +2,13 @@
 
 import { ActionType } from '@/type'
 import { RequestStatus, VideoRequest } from '@prisma/client'
-import { getCurrentUserId, isCurrentUserAdmin } from '@/app/data/user'
+import {
+  getCurrentUserId,
+  isCurrentUserAdmin,
+  isCurrentUserUploaderOrAdmin,
+} from '@/app/data/user'
 import { db } from '@/lib/db'
 import { getVideoCompletionStatus } from '@/app/data/video'
-import { checkAdmin, checkUploader } from '@/lib/access'
 
 export type SendApprovalVideoRequestProps = {
   videoId: string
@@ -15,9 +18,20 @@ export const sendApprovalVideoRequest = async ({
   videoId,
 }: SendApprovalVideoRequestProps): Promise<ActionType<VideoRequest>> => {
   try {
-    await checkUploader()
+    const isUploader = await isCurrentUserUploaderOrAdmin()
+
+    if (!isUploader)
+      return {
+        success: false,
+        message: '권한이 없는 유저입니다.',
+      }
 
     const userId = await getCurrentUserId()
+    if (!userId)
+      return {
+        success: false,
+        message: '현재 로그인이 되어있지 않습니다.',
+      }
 
     const existingRequest = await db.videoRequest.findUnique({
       where: {
@@ -76,7 +90,13 @@ export const approveVideoRequest = async ({
   requestId,
 }: ApproveVideoRequestProps): Promise<ActionType<VideoRequest>> => {
   try {
-    await checkAdmin()
+    const isAdmin = await isCurrentUserAdmin()
+
+    if (!isAdmin)
+      return {
+        success: false,
+        message: '권한이 없는 유저입니다.',
+      }
 
     const videoRequest = await db.videoRequest.update({
       where: {
@@ -106,7 +126,13 @@ export const rejectVideoRequest = async ({
   requestId,
 }: RejectVideoRequestProps): Promise<ActionType<VideoRequest>> => {
   try {
-    await checkAdmin()
+    const isAdmin = await isCurrentUserAdmin()
+
+    if (!isAdmin)
+      return {
+        success: false,
+        message: '권한이 없는 유저입니다.',
+      }
 
     const videoRequest = await db.videoRequest.update({
       where: {
@@ -134,6 +160,12 @@ export const deleteVideoRequest = async (
 ): Promise<ActionType<VideoRequest>> => {
   try {
     const userId = await getCurrentUserId()
+
+    if (!userId)
+      return {
+        success: false,
+        message: '로그인을 해주세요.',
+      }
 
     const existingRequest = await db.videoRequest.findUnique({
       where: {

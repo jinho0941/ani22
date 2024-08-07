@@ -59,7 +59,7 @@ export default function EditImageForm({ userImg }: Props) {
 
   const customButton = () => {
     return (
-      <div className='z-50 bg-indigo-500 rounded-full p-2 border border-black cursor-pointer hover:bg-indigo-600 transition-colors'>
+      <div className='z-10 bg-indigo-500 rounded-full p-2 border border-black cursor-pointer hover:bg-indigo-600 transition-colors'>
         <Edit2 className='h-4 w-4 text-white' />
       </div>
     )

@@ -4,18 +4,19 @@ import { auth } from '@/auth'
 import { db } from '@/lib/db'
 import { User, UserRole } from '@prisma/client'
 
-const getCurrentUserEmail = async (): Promise<string> => {
+export const getCurrentUserEmail = async (): Promise<string | null> => {
   const session = await auth()
-  if (!session) throw new Error('현재 로그인되어있지 않습니다.')
+  if (!session) return null
   const email = session.user?.email
-  if (!email) throw new Error('존재하지 않는 이메일 입니다.')
+  if (!email) return null
 
   return email
 }
 
-export const getCurrentUserId = async (): Promise<string> => {
+export const getCurrentUserId = async (): Promise<string | null> => {
   const email = await getCurrentUserEmail()
   try {
+    if (!email) return null
     const user = await db.user.findUnique({
       where: { email },
       select: {
@@ -23,17 +24,18 @@ export const getCurrentUserId = async (): Promise<string> => {
       },
     })
 
-    if (!user) throw new Error('존재하지 않는 유저 아이디 입니다.')
+    if (!user) return null
 
     return user.id
   } catch (error) {
-    throw new Error('유저 아이디를 가져오는중에 에러가 발생하였습니다.')
+    return null
   }
 }
 
 export const getCurrentUser = async (): Promise<User> => {
   const email = await getCurrentUserEmail()
   try {
+    if (!email) throw new Error('현재 로그인이 되어있지 않습니다.')
     const user = await db.user.findUnique({
       where: {
         email,

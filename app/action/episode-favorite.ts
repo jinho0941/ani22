@@ -14,6 +14,11 @@ export const toggleEpisodeFavorite = async ({
 }: ToggleProps): Promise<ActionType<EpisodeFavorite>> => {
   try {
     const userId = await getCurrentUserId()
+    if (!userId)
+      return {
+        success: false,
+        message: '현재 로그인이 되어있지 않습니다.',
+      }
 
     const existingFavorite = await db.episodeFavorite.findUnique({
       where: {

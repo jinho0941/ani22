@@ -101,6 +101,11 @@ export const editUserImg = async ({
 }: EditUserImgProps): Promise<ActionType<User>> => {
   try {
     const userId = await getCurrentUserId()
+    if (!userId)
+      return {
+        success: false,
+        message: '현재 로그인이 되어있지 않습니다.',
+      }
 
     const user = await db.user.update({
       where: {
@@ -126,6 +131,11 @@ export type editUserNickNameProps = { nickname: string }
 export const editUserNickname = async ({ nickname }: editUserNickNameProps) => {
   try {
     const userId = await getCurrentUserId()
+    if (!userId)
+      return {
+        success: false,
+        message: '현재 로그인이 되어있지 않습니다.',
+      }
 
     const user = await db.user.update({
       where: {
@@ -197,6 +207,12 @@ export const editUserPassword = async ({
 }: EditUserPasswordProps) => {
   try {
     const userId = await getCurrentUserId()
+    if (!userId)
+      return {
+        success: false,
+        message: '현재 로그인이 되어있지 않습니다.',
+      }
+
     const user = await db.user.findUnique({ where: { id: userId } })
 
     if (!user) {

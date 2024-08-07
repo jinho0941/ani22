@@ -2,9 +2,12 @@
 
 import { ActionType } from '@/type'
 import { RequestStatus, UserRole, UserRoleRequest } from '@prisma/client'
-import { getCurrentUserId, isCurrentUserUploaderOrAdmin } from '../data/user'
+import {
+  getCurrentUserId,
+  isCurrentUserAdmin,
+  isCurrentUserUploaderOrAdmin,
+} from '../data/user'
 import { db } from '@/lib/db'
-import { checkAdmin } from '@/lib/access'
 import { revalidatePath } from 'next/cache'
 
 export type SendUploaderApprovalRequestProps = {
@@ -18,6 +21,11 @@ export const sendUploaderApprovalRequest = async ({
 }: SendUploaderApprovalRequestProps): Promise<ActionType<UserRoleRequest>> => {
   try {
     const userId = await getCurrentUserId()
+    if (!userId)
+      return {
+        success: false,
+        message: '현재 로그인이 되어있지 않습니다.',
+      }
 
     const isUploader = await isCurrentUserUploaderOrAdmin()
     if (isUploader) {
@@ -45,7 +53,6 @@ export const sendUploaderApprovalRequest = async ({
       data: userRoleRequest,
     }
   } catch (error) {
-    console.log(error)
     return { success: false, message: '유저 권한 생성에 실패하였습니다.' }
   }
 }
@@ -56,6 +63,11 @@ export const reSendUploaderApprovalRequest = async ({
 }: SendUploaderApprovalRequestProps): Promise<ActionType<UserRoleRequest>> => {
   try {
     const userId = await getCurrentUserId()
+    if (!userId)
+      return {
+        success: false,
+        message: '현재 로그인이 되어있지 않습니다.',
+      }
 
     const isUploader = await isCurrentUserUploaderOrAdmin()
     if (isUploader) {
@@ -83,7 +95,6 @@ export const reSendUploaderApprovalRequest = async ({
       data: userRoleRequest,
     }
   } catch (error) {
-    console.log(error)
     return { success: false, message: '유저 권한 생성에 실패하였습니다.' }
   }
 }
@@ -98,7 +109,13 @@ export const approveUploaderRequest = async ({
   requestUserId,
 }: ApproveUploaderRequestProps): Promise<ActionType<UserRoleRequest>> => {
   try {
-    await checkAdmin()
+    const isAdmin = await isCurrentUserAdmin()
+
+    if (!isAdmin)
+      return {
+        success: false,
+        message: '권한이 없는 유저입니다.',
+      }
 
     const request = await db.userRoleRequest.update({
       where: {
@@ -136,7 +153,13 @@ export const rejectUploaderRequest = async ({
   requestId,
 }: RejectUploaderRequestProps): Promise<ActionType<UserRoleRequest>> => {
   try {
-    await checkAdmin()
+    const isAdmin = await isCurrentUserAdmin()
+
+    if (!isAdmin)
+      return {
+        success: false,
+        message: '권한이 없는 유저입니다.',
+      }
 
     const request = await db.userRoleRequest.update({
       where: {

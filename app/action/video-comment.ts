@@ -16,6 +16,11 @@ export const createVideoComment = async ({
 }: CreateVideoCommentProps): Promise<ActionType<VideoComment>> => {
   try {
     const userId = await getCurrentUserId()
+    if (!userId)
+      return {
+        success: false,
+        message: '현재 로그인이 되어있지 않습니다.',
+      }
 
     const comment = await db.videoComment.create({
       data: {
