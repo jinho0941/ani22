@@ -43,7 +43,7 @@ export const SideMenuButton = ({ username, userImg }: Props) => {
           <Menu />
         </Button>
       </SheetTrigger>
-      <SheetContent className='space-y-4'>
+      <SheetContent side={'left'} className='space-y-4'>
         <SheetHeader>
           <SheetTitle>
             <Logo isLink={true} />
