@@ -24,22 +24,21 @@ export const useSearchBar = () => {
   const searchValue = form.watch('search')
   const debouncedSearchValue = useDebounce(searchValue, 100)
 
-  const fetchEpisodes = async () => {
-    if (debouncedSearchValue) {
-      try {
-        const episodes = await findEpisodeTitleByTitle(debouncedSearchValue)
-        setResults(episodes)
-      } catch (error) {
-        console.error('Error searching episodes:', error)
-      }
-    } else {
-      setResults([])
-    }
-  }
-
   useEffect(() => {
+    const fetchEpisodes = async () => {
+      if (debouncedSearchValue) {
+        try {
+          const episodes = await findEpisodeTitleByTitle(debouncedSearchValue)
+          setResults(episodes)
+        } catch (error) {
+          console.error('Error searching episodes:', error)
+        }
+      } else {
+        setResults([])
+      }
+    }
     fetchEpisodes()
-  }, [debouncedSearchValue, fetchEpisodes])
+  }, [debouncedSearchValue])
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     const { search } = values
