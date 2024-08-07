@@ -68,3 +68,7 @@ export type VideoWithEpisodesAndComments = Video & {
 }
 export type VideoWithUser = Video & { user: User }
 export type VideoWithRequest = Video & { videoRequest: VideoRequest | null }
+export type VideoWithUserAndRequest = Video & {
+  user: User
+  videoRequest: VideoRequest | null
+}

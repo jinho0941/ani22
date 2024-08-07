@@ -5,6 +5,7 @@ import {
   VideoWithEpisodesAndComments,
   VideoWithRequest,
   VideoWithUser,
+  VideoWithUserAndRequest,
 } from '@/type'
 import { Video } from '@prisma/client'
 
@@ -140,6 +141,26 @@ export const getVideosByEpisodeId = async (
     })
 
     return videos
+  } catch (error) {
+    throw new Error('비디오 요청중 에러가 발생하였습니다.')
+  }
+}
+
+export const getVideoByIdWithUserAndRequest = async (
+  videoId: string,
+): Promise<VideoWithUserAndRequest> => {
+  try {
+    const video = await db.video.findUnique({
+      where: {
+        id: videoId,
+      },
+      include: {
+        videoRequest: true,
+        user: true,
+      },
+    })
+
+    return video!
   } catch (error) {
     throw new Error('비디오 요청중 에러가 발생하였습니다.')
   }

@@ -11,7 +11,7 @@ export const RequestItem = ({ request }: Props) => {
   const formattedDate = format(request.createdAt, 'yyyy-MM-dd')
 
   return (
-    <Link href={`/manage/video/${request.video.id}`}>
+    <Link href={`/manage/video-request/${request.video.id}`}>
       <div className='flex p-4 justify-between items-center bg-slate-300 dark:bg-slate-700 rounded-md cursor-pointer hover:bg-slate-400 dark:hover:bg-slate-800 transition-all'>
         <div className='flex gap-x-2 items-center overflow-hidden truncate'>
           <Avatar>
