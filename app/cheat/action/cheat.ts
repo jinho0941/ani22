@@ -2,6 +2,7 @@
 
 import { videoUrls } from '@/constants'
 import { db } from '@/lib/db'
+import { hashPassword } from '@/lib/utils'
 import { faker } from '@faker-js/faker'
 import { UserRole } from '@prisma/client'
 
@@ -15,7 +16,7 @@ export const createRandomUsers = async (
     const user = await db.user.create({
       data: {
         email: faker.internet.email(),
-        password: 'test1234',
+        password: hashPassword('test1234'),
         nickname: faker.internet.userName(),
         imageUrl: faker.image.avatar(),
         role: role,
