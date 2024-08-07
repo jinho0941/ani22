@@ -6,6 +6,7 @@ import {
   EpisodeWithIsFavorite,
   EpisodeWithRequest,
   EpisodeWithRequestAndVideos,
+  EpisodeWithUserAndRequestAndVideos,
   EpisodeWithVideos,
   EpisodeWithVideosAndUser,
   WithCursor,
@@ -285,6 +286,28 @@ export const getEpisodeWithRequestAndVideosById = async (
 
     return episode!
   } catch (error) {
+    throw new Error('에피소드를 가져오는중에 에러가 발생하였습니다.')
+  }
+}
+
+export const getEpisodeByIdWithUserAndRequest = async (
+  episodeId: string,
+): Promise<EpisodeWithUserAndRequestAndVideos> => {
+  try {
+    const episode = await db.episode.findUnique({
+      where: {
+        id: episodeId,
+      },
+      include: {
+        user: true,
+        videos: true,
+        episodeRequest: true,
+      },
+    })
+
+    return episode!
+  } catch (error) {
+    console.log(error)
     throw new Error('에피소드를 가져오는중에 에러가 발생하였습니다.')
   }
 }
