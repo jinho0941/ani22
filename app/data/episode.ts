@@ -286,6 +286,9 @@ export const getEpisodeWithRequestAndVideosById = async (
           include: {
             videoRequest: true,
           },
+          orderBy: {
+            order: 'desc',
+          },
         },
         episodeRequest: true,
       },

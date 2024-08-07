@@ -12,18 +12,18 @@ export const Navbar = async () => {
   const user = await getCurrentUser()
 
   return (
-    <nav className='fixed w-full bg-slate-200 dark:bg-slate-700 z-20'>
-      <div className='grid md:grid-cols-3 items-center h-16 md:px-10 px-2'>
-        <div className='md:flex hidden justify-start'>
+    <nav className='fixed top-0 left-0 w-full bg-slate-200 dark:bg-slate-700 z-20'>
+      <div className='flex items-center justify-between h-16 px-4 md:px-10'>
+        <div className='flex-1 md:flex hidden justify-start'>
           <Logo isLink={true} />
         </div>
-        <div className='flex items-center gap-x-2'>
-          <div className='md:hidden block'>
+        <div className='flex-1 flex justify-center md:justify-start items-center'>
+          <div className='md:hidden block mr-2'>
             <SideMenuButton username={user.nickname} userImg={user.imageUrl!} />
           </div>
           <SearchBar />
         </div>
-        <div className='md:flex hidden justify-end gap-x-4'>
+        <div className='flex-1 hidden md:flex justify-end items-center gap-x-4'>
           <ModeToggle />
           <CheatButton />
           <DashboardButton />

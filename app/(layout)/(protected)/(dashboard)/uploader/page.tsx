@@ -20,19 +20,17 @@ const Page = async ({
   const { data: episodes, cursorId } = episodesRes
 
   return (
-    <div>
-      <div className='mt-12 max-w-screen-2xl mx-auto'>
-        <EpisodeHeader />
-        <section className='mt-4 grid xl:grid-cols-6 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-x-4 gap-y-4'>
-          <CreateEpisodeButton />
-          <EpisodeList
-            search={search}
-            order={order}
-            episodes={episodes}
-            cursorId={cursorId}
-          />
-        </section>
-      </div>
+    <div className='mt-12 max-w-screen-2xl mx-auto'>
+      <EpisodeHeader />
+      <section className='mt-4 grid xl:grid-cols-6 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-x-4 gap-y-4'>
+        <CreateEpisodeButton />
+        <EpisodeList
+          search={search}
+          order={order}
+          episodes={episodes}
+          cursorId={cursorId}
+        />
+      </section>
     </div>
   )
 }

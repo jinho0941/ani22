@@ -13,6 +13,7 @@ import {
 import { updateVideoOrder } from '@/app/action/video'
 import { VideoWithRequest } from '@/type'
 import VideoItem from './video-item'
+import { useRouter } from 'next/navigation'
 
 type Props = {
   initialVideos: VideoWithRequest[]
@@ -20,6 +21,7 @@ type Props = {
 }
 
 export const VideoList = ({ initialVideos, episodeId }: Props) => {
+  const router = useRouter()
   const [videos, setVideos] = useState<VideoWithRequest[]>(initialVideos)
   const [isPending, startTransition] = useTransition()
 
@@ -50,6 +52,7 @@ export const VideoList = ({ initialVideos, episodeId }: Props) => {
         return
       }
       toast.success(action.message)
+      router.refresh()
     })
   }
 
