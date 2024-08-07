@@ -17,7 +17,7 @@ export const useEpisodeList = (
   useEffect(() => {
     setEpisodes(initialEpisodes)
     setCursorId(initialCursorId)
-  }, [search, order])
+  }, [search, order, initialEpisodes, initialCursorId])
 
   const loadMoreEpisodes = async () => {
     startTransition(async () => {

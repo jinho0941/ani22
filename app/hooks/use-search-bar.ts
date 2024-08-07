@@ -39,7 +39,7 @@ export const useSearchBar = () => {
 
   useEffect(() => {
     fetchEpisodes()
-  }, [debouncedSearchValue])
+  }, [debouncedSearchValue, fetchEpisodes])
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     const { search } = values

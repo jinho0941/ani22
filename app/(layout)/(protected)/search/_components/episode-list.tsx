@@ -28,7 +28,7 @@ export const EpisodeList = ({ episodes, cursorId, search }: Props) => {
   useEffect(() => {
     setInitEpisodes(episodes)
     setInitCursorId(cursorId)
-  }, [search])
+  }, [search, episodes, cursorId])
 
   const loadMoreEpisodes = async () => {
     startTransition(async () => {

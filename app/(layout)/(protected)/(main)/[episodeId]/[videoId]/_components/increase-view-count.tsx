@@ -12,6 +12,6 @@ export const IncreaseViewCount = ({ videoId }: Props) => {
       await increaseVideoCount({ videoId })
     }
     action()
-  }, [])
+  }, [videoId])
   return null
 }

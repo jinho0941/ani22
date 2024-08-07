@@ -18,9 +18,9 @@ export const CreateEpisode = ({ episodes }: Props) => {
       >
         Create Episode
       </ActionButton>
-      <div className='bg-slate-500 rounded-md h-80  overflow-y-scroll p-4 flex flex-col gap-y-2 scrollbar-hide'>
+      <div className='bg-slate-500 rounded-md h-80 overflow-y-scroll p-4 flex flex-col gap-y-2 scrollbar-hide'>
         {episodes.map((episode) => (
-          <Button asChild>
+          <Button key={episode.id} asChild>
             <Link href={`/create/${episode.id}`}>{episode.title}</Link>
           </Button>
         ))}
