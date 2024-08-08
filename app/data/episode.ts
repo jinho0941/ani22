@@ -95,6 +95,11 @@ export const getEpisodeByIdWithVideos = async (
       },
       include: {
         videos: {
+          where: {
+            videoRequest: {
+              status: RequestStatus.APPROVED,
+            },
+          },
           orderBy: {
             order,
           },
