@@ -6,6 +6,7 @@ import { EpisodeCard } from './episode-card'
 import { getEpisodesWithIsFavorite } from '@/app/data/episode'
 import useInfiniteScroll from '@/app/hooks/use-infinite-scroll'
 import { Skeleton } from '@/components/ui/skeleton'
+import { NoResults } from './no-result'
 
 type Props = {
   episodes: EpisodeWithIsFavorite[]
@@ -44,6 +45,9 @@ export const EpisodeList = ({ episodes, cursorId, search }: Props) => {
     cursorId: initCursorId,
     isLoading: isPending,
   })
+  if (initEpisodes.length === 0 && !isPending) {
+    return <NoResults searchTerm={search} />
+  }
 
   return (
     <>
