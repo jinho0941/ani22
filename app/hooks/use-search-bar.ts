@@ -35,7 +35,7 @@ export const useSearchBar = () => {
     clearResults()
   }, [find])
 
-  const debounceValue = useDebounce(searchValue, 100)
+  const debounceValue = useDebounce(searchValue, 300)
 
   useEffect(() => {
     const fetchEpisodes = async () => {
