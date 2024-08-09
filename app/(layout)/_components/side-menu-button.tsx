@@ -1,9 +1,14 @@
 'use client'
 
-import { logout } from '@/app/action/user'
-import { Logo } from '@/components/logo'
+import { Drama, Home, LayoutDashboard, LogOut, Menu, User } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import Link from 'next/link'
+
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
+import { logout } from '@/app/action/user'
+import { Logo } from '@/components/logo'
+
 import {
   Sheet,
   SheetClose,
@@ -13,9 +18,6 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet'
-import { Drama, Home, LayoutDashboard, LogOut, Menu, User } from 'lucide-react'
-import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 
 type Props = {
   username: string
@@ -53,7 +55,7 @@ export const SideMenuButton = ({ username, userImg }: Props) => {
         </SheetHeader>
         <div className='flex items-center gap-x-2'>
           <Avatar>
-            <AvatarImage src={userImg} />
+            <AvatarImage src={userImg} className='object-cover' />
             <AvatarFallback>U</AvatarFallback>
           </Avatar>
           <span>{username}</span>
