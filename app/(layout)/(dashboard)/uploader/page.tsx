@@ -22,7 +22,7 @@ const Page = async ({
   return (
     <div className='mt-12 max-w-screen-2xl mx-auto'>
       <EpisodeHeader />
-      <section className='mt-4 grid xl:grid-cols-6 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-x-4 gap-y-4'>
+      <section className='mt-4 grid xl:grid-cols-6 lg:grid-cols-4 md:grid-cols-3 grid-cols-2 gap-x-4 gap-y-4'>
         <CreateEpisodeButton />
         <EpisodeList
           search={search}

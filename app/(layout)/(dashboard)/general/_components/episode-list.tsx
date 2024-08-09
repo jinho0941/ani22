@@ -44,7 +44,7 @@ export const EpisodeList = ({ episodes, cursorId }: Props) => {
     <div className='lg:text-2xl text-lg font-bold'>
       <span className='lg:text-xl text-sm font-medium'>pick</span>
       <span className='ml-1'>에피소드</span>
-      <div className='mt-6 grid 2xl:grid-cols-6 xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-6'>
+      <div className='mt-6 grid 2xl:grid-cols-6 xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 grid-cols-2 gap-6'>
         {initEpisodes.map((episode) => (
           <EpisodeCard
             key={episode.id}
