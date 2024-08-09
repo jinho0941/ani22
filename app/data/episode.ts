@@ -292,7 +292,7 @@ export const getEpisodeWithRequestAndVideosById = async (
             videoRequest: true,
           },
           orderBy: {
-            order: 'desc',
+            order: 'asc',
           },
         },
         episodeRequest: true,
