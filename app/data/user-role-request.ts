@@ -18,7 +18,7 @@ export const getUserRoleRequests = async (
         user: true,
       },
       orderBy: {
-        createdAt: 'asc',
+        createdAt: 'desc',
       },
       take,
       ...(cursor && { cursor: { id: cursor } }),
