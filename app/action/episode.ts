@@ -1,7 +1,7 @@
 'use server'
 
 import { ActionType } from '@/type'
-import { Episode } from '@prisma/client'
+import { Episode, RequestStatus } from '@prisma/client'
 import { getCurrentUserId, isCurrentUserUploaderOrAdmin } from '@/app/data/user'
 import { db } from '@/lib/db'
 export type CreateEpisodeProps = {
@@ -116,6 +116,9 @@ export const findEpisodeTitleByTitle = async (
         title: {
           contains: title,
           mode: 'insensitive',
+        },
+        episodeRequest: {
+          status: RequestStatus.APPROVED,
         },
       },
       select: {
