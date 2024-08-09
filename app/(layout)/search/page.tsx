@@ -14,7 +14,7 @@ const Page = async ({ searchParams }: { searchParams?: { find: string } }) => {
 
   return (
     <NavContainer>
-      <div className='grid 2xl:grid-cols-6 xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 p-6 gap-6'>
+      <div className='grid 2xl:grid-cols-6 xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 grid-cols-2 p-6 gap-6'>
         <EpisodeList search={search!} episodes={episodes} cursorId={cursorId} />
       </div>
     </NavContainer>
