@@ -15,7 +15,10 @@ export const RequestItem = ({ request }: Props) => {
       <div className='flex p-4 justify-between items-center bg-slate-300 dark:bg-slate-700 rounded-md cursor-pointer hover:bg-slate-400 dark:hover:bg-slate-800 transition-all'>
         <div className='flex gap-x-2 items-center overflow-hidden truncate'>
           <Avatar>
-            <AvatarImage src={request.user.imageUrl!} />
+            <AvatarImage
+              src={request.user.imageUrl!}
+              className='object-cover'
+            />
             <AvatarFallback>U</AvatarFallback>
           </Avatar>
           <span className='font-bold text-lg'>{request.user.nickname}</span>

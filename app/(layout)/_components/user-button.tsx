@@ -24,7 +24,7 @@ export const UserButton = ({ imgUrl }: Props) => {
     <DropdownMenu>
       <DropdownMenuTrigger className='outline-none'>
         <Avatar>
-          <AvatarImage src={imgUrl} />
+          <AvatarImage className='object-cover' src={imgUrl} />
           <AvatarFallback>U</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>

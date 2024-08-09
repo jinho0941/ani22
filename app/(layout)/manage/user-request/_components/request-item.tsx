@@ -13,7 +13,7 @@ export const RequestItem = ({ request }: Props) => {
     <div className='grid grid-cols-3 px-4 py-2 border-b border-black dark:border-white'>
       <div className='flex gap-x-2 items-center overflow-x-hidden'>
         <Avatar>
-          <AvatarImage src={request.user.imageUrl!} />
+          <AvatarImage src={request.user.imageUrl!} className='object-cover' />
           <AvatarFallback>U</AvatarFallback>
         </Avatar>
         <span className='truncate'>{request.user.nickname}</span>

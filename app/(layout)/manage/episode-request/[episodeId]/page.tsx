@@ -33,7 +33,7 @@ const EpisodeRequestIdPage = async ({
           <h2 className='text-xl font-bold'>신청자</h2>
           <div className='mt-2 flex items-center gap-x-4'>
             <Avatar className='h-12 w-12'>
-              <AvatarImage src={user.imageUrl!} />
+              <AvatarImage src={user.imageUrl!} className='object-cover' />
               <AvatarFallback>U</AvatarFallback>
             </Avatar>
             <div className='text-xl font-bold'>{user.nickname}</div>

@@ -25,7 +25,7 @@ export const UserProfile = ({ userImg, username, role, status }: Props) => {
     <section className='lg:mt-12 mt-4'>
       <div className='flex gap-x-8 items-center'>
         <Avatar className='lg:h-40 lg:w-40 h-20 w-20 bg-slate-300 dark:bg-slate-900 border-2 border-black dark:border-white'>
-          <AvatarImage src={userImg} />
+          <AvatarImage src={userImg} className='object-cover' />
           <AvatarFallback>
             <span className='lg:text-5xl text-2xl'>U</span>
           </AvatarFallback>
