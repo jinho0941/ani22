@@ -3,7 +3,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useState, useTransition } from 'react'
 import { useForm } from 'react-hook-form'
-import { Edit2 } from 'lucide-react'
+import { Edit2, Minus, Plus } from 'lucide-react'
 import { toast } from 'sonner'
 import { z } from 'zod'
 
@@ -36,23 +36,20 @@ export const EditEpisodeTotalCountForm = ({ episode }: Props) => {
 
   const [isEdit, setIsEdit] = useState(false)
   const [isPending, startTransition] = useTransition()
+  const [count, setCount] = useState(episode.totalEpisodeCount ?? 1)
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      totalCount: episode.totalEpisodeCount ?? 0,
+      totalCount: count,
     },
   })
 
-  const currentValues = form.watch('totalCount')
-  const isDisabled = currentValues === episode.totalEpisodeCount
-
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     startTransition(async () => {
-      const { totalCount } = values
       const action = await updateEpisode({
         episodeId: episode.id,
-        totalEpisodeCount: totalCount,
+        totalEpisodeCount: count,
       })
       if (!action.success) {
         toast.error(action.message)
@@ -70,7 +67,15 @@ export const EditEpisodeTotalCountForm = ({ episode }: Props) => {
 
   const onCancelEdit = () => {
     setIsEdit(false)
-    form.resetField('totalCount')
+    setCount(episode.totalEpisodeCount ?? 1)
+  }
+
+  const handleIncrement = () => {
+    setCount((prevCount) => prevCount + 1)
+  }
+
+  const handleDecrement = () => {
+    setCount((prevCount) => Math.max(1, prevCount - 1))
   }
 
   return (
@@ -79,22 +84,47 @@ export const EditEpisodeTotalCountForm = ({ episode }: Props) => {
         <FormField
           control={form.control}
           name='totalCount'
-          render={({ field }) => (
+          render={() => (
             <FormItem>
               <FormLabel>총 화수</FormLabel>
               <FormControl>
                 <div className='relative'>
-                  <Input
-                    placeholder='총 화수'
-                    disabled={!isEdit || isPending}
-                    className={cn(!isEdit && 'pr-10')}
-                    type='number'
-                    value={field.value ?? ''}
-                    onChange={(e) => {
-                      const value = e.target.valueAsNumber
-                      field.onChange(Number.isNaN(value) ? undefined : value)
-                    }}
-                  />
+                  {isEdit ? (
+                    <div className='flex items-center space-x-2'>
+                      <Button
+                        type='button'
+                        size='icon'
+                        onClick={handleDecrement}
+                        disabled={isPending}
+                      >
+                        <Minus />
+                      </Button>
+                      <Input
+                        disabled
+                        className='text-center w-16'
+                        type='number'
+                        value={count}
+                        readOnly
+                      />
+                      <Button
+                        type='button'
+                        size='icon'
+                        onClick={handleIncrement}
+                        disabled={isPending}
+                      >
+                        <Plus />
+                      </Button>
+                    </div>
+                  ) : (
+                    <Input
+                      placeholder='총 화수'
+                      disabled
+                      className='pr-10'
+                      type='number'
+                      value={count}
+                      readOnly
+                    />
+                  )}
                   {!isEdit && (
                     <Button
                       onClick={onEdit}
@@ -120,7 +150,7 @@ export const EditEpisodeTotalCountForm = ({ episode }: Props) => {
             >
               취소하기
             </Button>
-            <Button type='submit' disabled={isDisabled || isPending}>
+            <Button type='submit' disabled={isPending}>
               {isPending ? '수정중' : '수정하기'}
             </Button>
           </div>
