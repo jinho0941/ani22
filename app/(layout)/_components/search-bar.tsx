@@ -1,15 +1,20 @@
 'use client'
 
+import { useRef } from 'react'
 import { Search } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Form, FormControl, FormField, FormItem } from '@/components/ui/form'
 import { useSearchBar } from '@/app/hooks/use-search-bar'
+import { useClickOutside } from '@/app/hooks/use-clear-outside'
 
 export const SearchBar = () => {
-  const { form, results, onSubmit, onClick } = useSearchBar()
+  const { form, results, onSubmit, onClick, clearResults } = useSearchBar()
+  const searchBarRef = useRef<HTMLDivElement>(null)
+
+  useClickOutside(searchBarRef, clearResults)
 
   return (
-    <div className='flex justify-center relative w-full'>
+    <div ref={searchBarRef} className='flex justify-center relative w-full'>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}

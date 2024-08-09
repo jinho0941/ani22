@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { useForm } from 'react-hook-form'
+import { useForm, UseFormReturn } from 'react-hook-form'
 import { z } from 'zod'
 
 import { findEpisodeTitleByTitle } from '@/app/action/episode'
@@ -11,10 +11,12 @@ const formSchema = z.object({
   search: z.string().min(1).max(50),
 })
 
+type FormSchema = z.infer<typeof formSchema>
+
 export const useSearchBar = () => {
   const router = useRouter()
   const [results, setResults] = useState<string[]>([])
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form: UseFormReturn<FormSchema> = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       search: '',
@@ -40,7 +42,7 @@ export const useSearchBar = () => {
     fetchEpisodes()
   }, [debouncedSearchValue])
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
+  const onSubmit = (values: FormSchema) => {
     const { search } = values
     const query = new URLSearchParams({ find: search })
     form.reset()
@@ -53,5 +55,7 @@ export const useSearchBar = () => {
     router.push(`/search?${query}`)
   }
 
-  return { form, results, onSubmit, onClick }
+  const clearResults = () => setResults([])
+
+  return { form, results, onSubmit, onClick, clearResults }
 }
