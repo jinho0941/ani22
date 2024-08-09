@@ -19,6 +19,7 @@ import { LoginSchemaType } from '@/type'
 import { toast } from 'sonner'
 import { login } from '@/app/action/user'
 import { useRouter } from 'next/navigation'
+import { Loader2 } from 'lucide-react'
 
 const loginFields = [
   {
@@ -43,8 +44,8 @@ export default function LoginForm() {
   const form = useForm<LoginSchemaType>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
-      email: 'admin@mail.com',
-      password: 'test1234',
+      email: '',
+      password: '',
     },
     mode: 'onBlur',
   })
@@ -85,7 +86,7 @@ export default function LoginForm() {
           />
         ))}
         <Button disabled={isPending} type='submit' className='w-full'>
-          로그인
+          {isPending ? <Loader2 className='animate-spin h-6 w-6' /> : '로그인'}
         </Button>
       </form>
     </Form>
