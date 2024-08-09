@@ -1,9 +1,8 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { useForm, UseFormReturn } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-
 import { findEpisodeTitleByTitle } from '@/app/action/episode'
 import { useDebounce } from './use-debounce'
 
@@ -16,7 +15,8 @@ type FormSchema = z.infer<typeof formSchema>
 export const useSearchBar = () => {
   const router = useRouter()
   const [results, setResults] = useState<string[]>([])
-  const form: UseFormReturn<FormSchema> = useForm<FormSchema>({
+  const [selectedIndex, setSelectedIndex] = useState(-1)
+  const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       search: '',
@@ -28,17 +28,20 @@ export const useSearchBar = () => {
 
   useEffect(() => {
     const fetchEpisodes = async () => {
-      if (debouncedSearchValue) {
-        try {
-          const episodes = await findEpisodeTitleByTitle(debouncedSearchValue)
-          setResults(episodes)
-        } catch (error) {
-          console.error('Error searching episodes:', error)
-        }
-      } else {
+      if (!debouncedSearchValue) {
         setResults([])
+        return
+      }
+
+      try {
+        const episodes = await findEpisodeTitleByTitle(debouncedSearchValue)
+        setResults(episodes)
+        setSelectedIndex(-1)
+      } catch (error) {
+        console.error('Error searching episodes:', error)
       }
     }
+
     fetchEpisodes()
   }, [debouncedSearchValue])
 
@@ -57,5 +60,38 @@ export const useSearchBar = () => {
 
   const clearResults = () => setResults([])
 
-  return { form, results, onSubmit, onClick, clearResults }
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'ArrowDown') {
+      setSelectedIndex((prevIndex) =>
+        prevIndex < results.length - 1 ? prevIndex + 1 : 0,
+      )
+      return
+    }
+
+    if (e.key === 'ArrowUp') {
+      setSelectedIndex((prevIndex) =>
+        prevIndex > 0 ? prevIndex - 1 : results.length - 1,
+      )
+      return
+    }
+
+    if (
+      e.key === 'Enter' &&
+      selectedIndex >= 0 &&
+      selectedIndex < results.length
+    ) {
+      onClick(results[selectedIndex])
+      return
+    }
+  }
+
+  return {
+    form,
+    results,
+    onSubmit,
+    onClick,
+    clearResults,
+    handleKeyDown,
+    selectedIndex,
+  }
 }

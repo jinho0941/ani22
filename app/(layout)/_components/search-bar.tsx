@@ -8,7 +8,15 @@ import { useSearchBar } from '@/app/hooks/use-search-bar'
 import { useClickOutside } from '@/app/hooks/use-clear-outside'
 
 export const SearchBar = () => {
-  const { form, results, onSubmit, onClick, clearResults } = useSearchBar()
+  const {
+    form,
+    results,
+    onSubmit,
+    onClick,
+    clearResults,
+    handleKeyDown,
+    selectedIndex,
+  } = useSearchBar()
   const searchBarRef = useRef<HTMLDivElement>(null)
 
   useClickOutside(searchBarRef, clearResults)
@@ -33,6 +41,7 @@ export const SearchBar = () => {
                       className='pr-12'
                       placeholder='보고싶은 작품을 검색하세요.'
                       {...field}
+                      onKeyDown={handleKeyDown}
                     />
                   </div>
                 </FormControl>
@@ -47,7 +56,9 @@ export const SearchBar = () => {
             <div
               key={index}
               onClick={() => onClick(title)}
-              className='p-2 hover:bg-gray-100 dark:hover:bg-slate-800 cursor-pointer'
+              className={`p-2 hover:bg-gray-100 dark:hover:bg-slate-800 cursor-pointer ${
+                index === selectedIndex ? 'bg-gray-200 dark:bg-slate-700' : ''
+              }`}
             >
               {title}
             </div>
