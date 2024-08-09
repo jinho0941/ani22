@@ -38,7 +38,6 @@ export const EpisodeCard = ({
         setInitIsFavorite((prev) => !prev)
         return
       }
-      toast.success(action.message)
     })
   }
 
