@@ -20,7 +20,9 @@ export const take = 6
 
 export const accounts = [
   { label: 'email', value: 'admin@mail.com' },
+  { label: 'password', value: 'test1234' },
   { label: 'email', value: 'uploader@mail.com' },
+  { label: 'password', value: 'test1234' },
   { label: 'email', value: 'general@mail.com' },
   { label: 'password', value: 'test1234' },
 ]
