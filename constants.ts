@@ -24,3 +24,26 @@ export const accounts = [
   { label: 'email', value: 'general@mail.com' },
   { label: 'password', value: 'test1234' },
 ]
+
+export const categoryOptions = [
+  { value: 'action', label: '액션' },
+  { value: 'adventure', label: '모험' },
+  { value: 'comedy', label: '코미디' },
+  { value: 'drama', label: '드라마' },
+  { value: 'fantasy', label: '판타지' },
+  { value: 'horror', label: '공포' },
+  { value: 'mystery', label: '미스터리' },
+  { value: 'psychological', label: '심리' },
+  { value: 'romance', label: '로맨스' },
+  { value: 'sci-fi', label: 'SF' },
+  { value: 'slice-of-life', label: '일상' },
+  { value: 'sports', label: '스포츠' },
+  { value: 'supernatural', label: '초자연' },
+  { value: 'thriller', label: '스릴러' },
+  { value: 'mecha', label: '메카' },
+  { value: 'isekai', label: '이세계' },
+  { value: 'historical', label: '역사' },
+  { value: 'military', label: '군사' },
+  { value: 'music', label: '음악' },
+  { value: 'parody', label: '패러디' },
+]

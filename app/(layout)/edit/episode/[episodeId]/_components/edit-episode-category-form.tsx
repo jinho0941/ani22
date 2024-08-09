@@ -22,33 +22,11 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover'
 import { useRouter } from 'next/navigation'
+import { categoryOptions } from '@/constants'
 
 type Props = {
   episode: Episode
 }
-
-const categoryOptions = [
-  { value: 'action', label: '액션' },
-  { value: 'adventure', label: '모험' },
-  { value: 'comedy', label: '코미디' },
-  { value: 'drama', label: '드라마' },
-  { value: 'fantasy', label: '판타지' },
-  { value: 'horror', label: '공포' },
-  { value: 'mystery', label: '미스터리' },
-  { value: 'psychological', label: '심리' },
-  { value: 'romance', label: '로맨스' },
-  { value: 'sci-fi', label: 'SF' },
-  { value: 'slice-of-life', label: '일상' },
-  { value: 'sports', label: '스포츠' },
-  { value: 'supernatural', label: '초자연' },
-  { value: 'thriller', label: '스릴러' },
-  { value: 'mecha', label: '메카' },
-  { value: 'isekai', label: '이세계' },
-  { value: 'historical', label: '역사' },
-  { value: 'military', label: '군사' },
-  { value: 'music', label: '음악' },
-  { value: 'parody', label: '패러디' },
-]
 
 export const EditEpisodeCategoryForm = ({ episode }: Props) => {
   const router = useRouter()
@@ -95,7 +73,7 @@ export const EditEpisodeCategoryForm = ({ episode }: Props) => {
   }
 
   return (
-    <div className='space-y-2'>
+    <div className='relative'>
       <div className='space-y-2'>
         <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger asChild>
@@ -152,7 +130,7 @@ export const EditEpisodeCategoryForm = ({ episode }: Props) => {
         </div>
       </div>
       {!isDisabled && (
-        <div className='flex justify-end'>
+        <div className='flex absolute top-0 left-[220px]'>
           <Button onClick={onSubmit} type='button' disabled={isPending}>
             {isPending ? '수정중' : '카테고리 수정하기'}
           </Button>
