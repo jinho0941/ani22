@@ -11,10 +11,10 @@ export const SearchBar = () => {
   const {
     form,
     results,
-    onSubmit,
+    handleFormSubmit,
     onClick,
     clearResults,
-    handleKeyDown,
+    handleKeyUp,
     selectedIndex,
   } = useSearchBar()
   const searchBarRef = useRef<HTMLDivElement>(null)
@@ -25,7 +25,7 @@ export const SearchBar = () => {
     <div ref={searchBarRef} className='flex justify-center relative w-full'>
       <Form {...form}>
         <form
-          onSubmit={form.handleSubmit(onSubmit)}
+          onSubmit={handleFormSubmit}
           autoComplete='off'
           className='space-y-8 w-full'
         >
@@ -41,7 +41,7 @@ export const SearchBar = () => {
                       className='pr-12'
                       placeholder='보고싶은 작품을 검색하세요.'
                       {...field}
-                      onKeyDown={handleKeyDown}
+                      onKeyUp={handleKeyUp}
                     />
                   </div>
                 </FormControl>
