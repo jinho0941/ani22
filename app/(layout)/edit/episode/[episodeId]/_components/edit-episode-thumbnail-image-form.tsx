@@ -86,13 +86,16 @@ export const EditEpisodeThumbnailImageForm = ({ episode }: Props) => {
             <FormItem>
               <FormLabel>썸네일</FormLabel>
               <FormControl>
-                <FileUpload
-                  onChange={field.onChange}
-                  value={field.value}
-                  endpoint='imageUploader'
-                  onIconClick={onEdit}
-                  changeEvent={onEdit}
-                />
+                <div className='relative'>
+                  <div></div>
+                  <FileUpload
+                    onChange={field.onChange}
+                    value={field.value}
+                    endpoint='imageUploader'
+                    onIconClick={onEdit}
+                    changeEvent={onEdit}
+                  />
+                </div>
               </FormControl>
             </FormItem>
           )}

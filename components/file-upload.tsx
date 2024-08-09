@@ -2,7 +2,6 @@
 
 import { Edit2, Loader2 } from 'lucide-react'
 import Image from 'next/image'
-import '@uploadthing/react/styles.css'
 import { cn } from '@/lib/utils'
 import { useState, useEffect } from 'react'
 import { UploadDropzone } from '@/lib/uploadthing'
