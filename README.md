@@ -1,4 +1,4 @@
-## 에니메이션 시청 사이트 ani22
+## 취직포폴용 ani22
 
 ### site-link: https://ani22-vl8i.vercel.app/ 
 ![image](https://github.com/user-attachments/assets/a9794d8d-dd1a-46ae-adff-9727ad0496dc)
